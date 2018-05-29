@@ -36,6 +36,23 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
     },
+    optimization: {
+        splitChunks: {
+            chunks: "async",
+            name: true,
+            cacheGroups: {
+                default: {
+                    minChunks: 1,
+                    reuseExistingChunk: true
+                },
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "vendor",
+                    chunks: "all"
+                }
+            }
+        }
+    },
     plugins: [
         new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({

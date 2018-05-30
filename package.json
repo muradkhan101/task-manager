@@ -1,7 +1,7 @@
 {
-  "name": "react-playground",
+  "name": "task-manager",
   "version": "1.0.0",
-  "description": "Testing build tools with React and component structures",
+  "description": "A trello-esque task management app",
   "main": "index.js",
   "dependencies": {
     "emotion": "^9.1.0",
@@ -9,6 +9,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-emotion": "^9.1.0",
+    "react-icons-kit": "^1.1.5",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "rxjs": "^5.5.7"
@@ -34,7 +35,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:dev": "NODE_ENV=dev webpack --mode development --config=webpack/webpack.dev.js",
     "build:prod": "NODE_ENV=prod webpack --mode production --config=webpack/webpack.prod.js",
-    "dev": "webpack-dev-server --color --progress",
+    "dev": "webpack-dev-server --color --progress --mode=development --hot --inline --config=webpack/webpack.dev.js",
     "watch": "webpack --watch"
   },
   "repository": {

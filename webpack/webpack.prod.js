@@ -8,7 +8,7 @@ const extractCss = new CssExtractPlugin({
 });
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: './src/index.tsx',
     module: {
         rules: [
             {
@@ -56,7 +56,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
-            template: 'index.html'
+            template: './src/index.html'
         }),
         new CssExtractPlugin({
             filename: '[name].[chunkHash].css',

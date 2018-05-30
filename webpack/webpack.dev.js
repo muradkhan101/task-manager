@@ -11,7 +11,6 @@ const extractCss = new CssExtractPlugin({
 module.exports = {
     entry: {
         'main': './src/index.tsx',
-        'other': './src/other.tsx'
     },
     module: {
         rules: [
@@ -27,7 +26,7 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
-                test: /\.scss$/,
+                test: /\.s?css$/,
                 include: /src/,
                 use: [
                     CssExtractPlugin.loader,
@@ -89,11 +88,11 @@ module.exports = {
         port: 3000,
         compress: true,
         contentBase: path.join(__dirname, "dist"),
-        overlay: true
+        overlay: true,
     },
     devtool: 'eval-source-map',
     output: {
-        filename: 'bundle.[chunkHash].js',
+        filename: '[name].[hash].js',
         path: path.resolve(__dirname, '../dist')
     }
 }

@@ -18,6 +18,7 @@ time, mark, audio, video {
   font: inherit;
   vertical-align: baseline;
   box-sizing: border-box;
+  color: #313131;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -26,6 +27,8 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
   line-height: 1;
+  font-family: '-apple-system,BlinkMacSystemFont,Helvetica,"Segoe UI",Arial,sans-serif';
+  font-size: 16px;
 }
 ol, ul {
   list-style: none;
@@ -46,3 +49,11 @@ img {
   width: 100%;
   height: auto;
 }
+
+/* TYPOGRAPHY */
+
+h1 { font-size: 36px; font-weight: 700; }
+h2 { font-size: 36px; font-weight: 500; }
+h3 { font-size: 24px; font-weight: 700; }
+h4 { font-size: 24px; font-weight: 500; }
+p { font-size: 16px; }

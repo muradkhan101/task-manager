@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import styled from 'react-emotion';
 import {
     ic_check_box_outline_blank as BlankCheckbox,
@@ -6,6 +6,8 @@ import {
 } from 'react-icons-kit/md';
 
 import { ALT_FONTS, MAIN_COLORS, ALT_COLORS } from '../common/css';
+import { truncate } from '../common';
+import { ITask, TaskStatus } from './common/interfaces';
 
 const Task = styled.div`
     display: flex;
@@ -14,25 +16,22 @@ const Task = styled.div`
     border-bottom: 2px solid ${ALT_COLORS.border};
 `;
 
-export enum TaskStatus { DONE, IN_PROGRESS }
-
 interface Props {
-    title: string;
-    description: string;
-    dueDate: string;
-    status: TaskStatus;
+    task: ITask;
+    click: (number) => any;
 }
 export class TaskItem extends Component<Props> {
     render() {
-        const { title, description, dueDate, status } = this.props;
+        const { task, click } = this.props;
+        const { title, description, dueDate, status, id } = task;
         return (
             <Task>
                 <div>
                     <h1>{title}</h1>
-                    <p> {description.slice(0, 8) + '...'} </p>
+                    <p> {truncate(description, 8)} </p>
                     <span>{dueDate}</span>
                 </div>
-                <div>
+                <div onClick={() => click(id)}>
                     {status === TaskStatus.DONE ? <Checkbox/> : <BlankCheckbox/> }
                 </div>
             </Task>

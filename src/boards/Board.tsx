@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
-import { plus as Plus } from 'react-icons-kit/fa/plus';
+import { FaPlus } from 'react-icons/fa/plus';
 
 import { MAIN_COLORS } from '../common/css';
 import { ITask, IBoard } from './common/interfaces';
@@ -10,17 +10,25 @@ const BoardContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 250px;
 `;
 
 const TaskContainer = styled.div`
     padding: 12px 8px;
 `;
+
 const TaskAdder = styled.div`
     display: flex;
+    border-top: 1px solid ${MAIN_COLORS.grassy};
     justify-content: space-between;
     padding: 8px 8px;
     background: white;
     color: ${MAIN_COLORS.grassy};
+`;
+
+const TaskInput = styled.input`
+    border: none;
+    border-top: 1px solid ${MAIN_COLORS.grassy};
 `;
 
 interface Props {
@@ -28,7 +36,7 @@ interface Props {
 }
 export class Board extends Component<Props> {
     state = {
-        tempTask: null
+        tempTask: null,
     };
 
     toggleTaskStatus = (id) => {
@@ -38,20 +46,28 @@ export class Board extends Component<Props> {
         console.log(id);
     }
     createTask = () => {
+        this.setState({tempTask: ''});
         // Make temp task
         // If someone enters that, append to array and dispatch AJAX
     }
+    updateTask = (e) => {
+        console.log(e);
+    }
     render() {
         const { board } = this.props;
+        const { tempTask } = this.state;
         return (
             <BoardContainer>
                 <TaskContainer>
                     {board.issues.map(issue => <TaskItem task={issue} key={issue.id} click={this.toggleTaskStatus} />)}
                 </TaskContainer>
-                <TaskAdder>
-                    <h3>Create Task</h3>
-                    <Plus/>
-                </TaskAdder>
+                { tempTask === null
+                    ? <TaskAdder>
+                        <h3>Create Task</h3>
+                        <FaPlus/>
+                    </TaskAdder>
+                    : <TaskInput onKeyPress={this.updateTask}/>
+                }
             </BoardContainer>
         );
     }

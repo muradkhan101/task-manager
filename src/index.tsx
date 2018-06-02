@@ -1,21 +1,33 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import styled from 'react-emotion';
-import { env } from './environments/environment';
-
+import React from 'react';
+import { render } from 'react-dom';
+import { Board } from './boards/Board';
+import { IBoard } from './boards/common/interfaces';
 import './index.scss';
 
-const Para = styled('p')`
-    font-size: 48px;
-    font-family: 'Helvetica Neue', 'Franklin Gothic', sans-serif;
-    margin: 0 auto;
-    color: #313131;
-`;
+const board: IBoard = {
+    id: 1,
+    name: 'Testerino',
+    issues: [
+        {
+            id: 2,
+            title: 'Make test data',
+            description: 'data used for testing',
+            dueDate: 'today',
+            status: 1
+        },
+        {
+            id: 3,
+            title: 'Teach doo doo manners',
+            description: 'She\'s a monster!',
+            dueDate: 'tomorrow',
+            status: 0
+        }
+    ]
+};
 
 const App = () => (
-    <Para>
-        Making stuff is fun!!!!
-    </Para>
+    <Board board={board}>
+    </Board>
 );
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+render(<App/>, document.getElementById('root'));

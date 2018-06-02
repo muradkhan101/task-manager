@@ -1,9 +1,8 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import styled from 'react-emotion';
-import {
-    ic_check_box_outline_blank as BlankCheckbox,
-    ic_check_box as Checkbox
-} from 'react-icons-kit/md';
+import { MdCheckBoxOutlineBlank as BlankCheckbox } from 'react-icons/md/check-box-outline-blank';
+import { MdCheckBox as Checkbox } from 'react-icons/md/check-box';
+
 
 import { ALT_FONTS, MAIN_COLORS, ALT_COLORS } from '../common/css';
 import { truncate } from '../common';
@@ -18,7 +17,7 @@ const Task = styled.div`
 
 interface Props {
     task: ITask;
-    click: (number) => any;
+    click: (id: number) => any;
 }
 export class TaskItem extends Component<Props> {
     render() {

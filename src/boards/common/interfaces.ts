@@ -1,4 +1,4 @@
-export enum TaskStatus { DONE, IN_PROGRESS }
+export enum TaskStatus { IN_PROGRESS, DONE }
 
 export interface ITask {
     id: number;

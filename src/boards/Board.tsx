@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
-import { FaPlus } from 'react-icons/fa/plus';
+import FaPlus from 'react-icons/lib/fa/plus';
 
 import { MAIN_COLORS } from '../common/css';
 import { ITask, IBoard } from './common/interfaces';
 import { TaskItem } from './TaskItem';
 
-const BoardContainer = styled.div`
+const BoardContainer = styled('div')`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 250px;
 `;
 
-const TaskContainer = styled.div`
+const TaskContainer = styled('div')`
     padding: 12px 8px;
 `;
 
-const TaskAdder = styled.div`
+const TaskAdder = styled('div')`
     display: flex;
     border-top: 1px solid ${MAIN_COLORS.grassy};
     justify-content: space-between;
@@ -26,7 +26,7 @@ const TaskAdder = styled.div`
     color: ${MAIN_COLORS.grassy};
 `;
 
-const TaskInput = styled.input`
+const TaskInput = styled('input')`
     border: none;
     border-top: 1px solid ${MAIN_COLORS.grassy};
 `;
@@ -35,7 +35,7 @@ interface Props {
     board: IBoard;
 }
 export class Board extends Component<Props> {
-    state = {
+    state: { tempTask: string } = {
         tempTask: null,
     };
 
@@ -51,7 +51,7 @@ export class Board extends Component<Props> {
         // If someone enters that, append to array and dispatch AJAX
     }
     updateTask = (e) => {
-        console.log(e);
+        this.setState({tempTask: e.target.value});
     }
     render() {
         const { board } = this.props;
@@ -62,11 +62,11 @@ export class Board extends Component<Props> {
                     {board.issues.map(issue => <TaskItem task={issue} key={issue.id} click={this.toggleTaskStatus} />)}
                 </TaskContainer>
                 { tempTask === null
-                    ? <TaskAdder>
+                    ? <TaskAdder onClick={() => this.setState({tempTask: ''})}>
                         <h3>Create Task</h3>
                         <FaPlus/>
                     </TaskAdder>
-                    : <TaskInput onKeyPress={this.updateTask}/>
+                    : <TaskInput value={tempTask} onChange={this.updateTask}/>
                 }
             </BoardContainer>
         );

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "./dist/",
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "module": "es6",
         "target": "es5",
         "sourceMap": true,
@@ -14,7 +14,8 @@
         ],
         "jsxFactory": "React.createElement",
         "typeRoots": [
-            "./typings"        ]
+            "./typings"        ],
+        "allowSyntheticDefaultImports": true,
     },
     "include": [
         "src/**/*.ts"

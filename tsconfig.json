@@ -16,6 +16,7 @@
         "typeRoots": [
             "./typings"        ],
         "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true
     },
     "include": [
         "src/**/*.ts"

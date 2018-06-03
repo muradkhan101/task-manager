@@ -4,6 +4,8 @@ import { catchError } from 'rxjs/operators/catchError';
 import { of } from 'rxjs/observable/of';
 import 'rxjs/add/operator/map';
 
+import { Injectable } from '../decorators/Inject';
+
 function checkStatus(res: Response) {
     if (res.status >= 400) {
         throw res;
@@ -19,7 +21,8 @@ const defaultHeaders: RequestInit = {
 
 type AuthFn = () => ({});
 
-class HttpClient {
+@Injectable
+export class HttpClient {
     constructor(
         private _baseUrl = '',
         private _authFn: AuthFn = () => ({})
@@ -71,4 +74,4 @@ class HttpClient {
     }
 }
 
-export const http = new HttpClient();
+// export const http = new HttpClient();

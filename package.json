@@ -4,6 +4,7 @@
   "description": "A trello-esque task management app",
   "main": "index.js",
   "dependencies": {
+    "@types/whatwg-fetch": "0.0.33",
     "emotion": "^9.1.0",
     "npm": "^5.8.0",
     "react": "^16.2.0",

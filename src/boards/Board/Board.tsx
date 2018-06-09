@@ -67,7 +67,7 @@ export class Board extends Component<Props> {
         return (
             <BoardContainer>
                 <TaskContainer>
-                    {board.issues.map(issue => <TaskItemContainer task={issue} key={issue.id} />)}
+                    {board.Issues.map(issue => <TaskItemContainer task={issue} key={issue.ID} />)}
                 </TaskContainer>
                 { tempTask === null
                     ? <TaskAdder onClick={() => this.setState({tempTask: ''})}>

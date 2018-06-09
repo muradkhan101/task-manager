@@ -10,14 +10,12 @@ function setupInjectables() {
     let classStore = new Map();
 
     function inject(instance) {
-
-        let clazz = classStore.get(instance.name);
+        let clazz = classStore.get(instance.name || instance);
         if (!clazz) throw ReferenceError('Trying to inject an instance that doesn\'t exist:', );
         return clazz;
     }
     // target: any, key: string, descriptor: TypedPropertyDescriptor<T>
     function injectable<T>(constructor: Type<T>) {
-        console.log(Reflect.getMetadataKeys(constructor));
         classStore.set(constructor.name, new constructor());
     }
     return { Inject: inject, Injectable: injectable };

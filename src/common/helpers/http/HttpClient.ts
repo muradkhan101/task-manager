@@ -4,8 +4,6 @@ import { catchError } from 'rxjs/operators/catchError';
 import { of } from 'rxjs/observable/of';
 import 'rxjs/add/operator/map';
 
-import { Injectable } from '../decorators/Inject';
-
 function checkStatus(res: Response) {
     if (res.status >= 400) {
         throw res;
@@ -19,9 +17,8 @@ const defaultHeaders: RequestInit = {
     }
 };
 
-type AuthFn = () => ({});
+type AuthFn = (options: RequestInit) => ({});
 
-@Injectable
 export class HttpClient {
     constructor(
         private _baseUrl = '',
@@ -62,8 +59,7 @@ export class HttpClient {
     private baseFetch(url: string, options: RequestInit): Observable<Response> {
         return fromPromise(
             fetch(this._baseUrl + url, {
-                ...options,
-                ...this._authFn(),
+                ...this._authFn(options),
             }).then(checkStatus)
             .then(res => {
                 return options.headers['Content-Type'] === 'application/json'
@@ -74,4 +70,4 @@ export class HttpClient {
     }
 }
 
-// export const http = new HttpClient();
+export const http = new HttpClient();

@@ -1,15 +1,15 @@
 export enum TaskStatus { IN_PROGRESS, DONE }
 
 export interface ITask {
-    id: number;
-    title: string;
-    description: string;
-    dueDate: string;
-    status: TaskStatus;
+    ID: number;
+    Title: string;
+    Description: string;
+    DueDate?: string;
+    Status: TaskStatus;
 }
 
 export interface IBoard {
-    id: number;
-    name: string;
-    issues: Array<ITask>;
+    ID: number;
+    Name: string;
+    Issues: Array<ITask>;
 }

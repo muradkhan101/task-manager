@@ -4,45 +4,45 @@ import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
 
 const boardData: IBoard = {
-    id: 1,
-    name: 'Testerino',
-    issues: [
+    ID: 1,
+    Name: 'Testerino',
+    Issues: [
         {
-            id: 2,
-            title: 'Make test data',
-            description: 'data used for testing',
-            dueDate: 'today',
-            status: 1
+            ID: 2,
+            Title: 'Make test data',
+            Description: 'data used for testing',
+            DueDate: 'today',
+            Status: 1
         },
         {
-            id: 3,
-            title: 'Teach doo doo manners',
-            description: 'She\'s a monster!',
-            dueDate: 'tomorrow',
-            status: 0
+            ID: 3,
+            Title: 'Teach doo doo manners',
+            Description: 'She\'s a monster!',
+            DueDate: 'tomorrow',
+            Status: 0
         }
     ]
 };
 
 interface Props {
-    id: number;
+    ID: number;
 }
 export class BoardContainer extends React.PureComponent<Props> {
     state: { board: IBoard } = {
         board: boardData
     };
 
-    createTask = (title) => {
+    createTask = (Title) => {
         let task: ITask = {
-            id: Math.floor(Math.random() * 10000),
-            title,
-            description: '',
-            dueDate: 'future',
-            status: 0
+            ID: Math.floor(Math.random() * 10000),
+            Title,
+            Description: '',
+            DueDate: 'future',
+            Status: 0
         };
 
         this.setState({
-            board: Object.assign({}, this.state.board, { issues: this.state.board.issues.concat(task) }),
+            board: Object.assign({}, this.state.board, { Issues: this.state.board.Issues.concat(task) }),
             tempTask: null
         });
         // Make temp task

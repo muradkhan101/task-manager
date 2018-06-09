@@ -20,16 +20,16 @@ interface Props extends ITask {
 }
 export class TaskItem extends PureComponent<Props> {
     render() {
-        const { title, description, dueDate, status, id, click } = this.props;
+        const { Title, Description, DueDate, Status, ID, click } = this.props;
         return (
             <Task>
                 <div>
-                    <h3>{title}</h3>
-                    <p> {truncate(description, 20)} </p>
-                    <span>{dueDate}</span>
+                    <h3>{Title}</h3>
+                    <p> {truncate(Description, 20)} </p>
+                    <span>{DueDate}</span>
                 </div>
-                <div onClick={() => click(id)}>
-                    {status === TaskStatus.DONE ? <Checkbox/> : <BlankCheckbox/> }
+                <div onClick={() => click(ID)}>
+                    {Status === TaskStatus.DONE ? <Checkbox/> : <BlankCheckbox/> }
                 </div>
             </Task>
         );

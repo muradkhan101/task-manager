@@ -12,14 +12,16 @@ const boardData: IBoard = {
             Title: 'Make test data',
             Description: 'data used for testing',
             DueDate: 'today',
-            Status: 1
+            Status: 1,
+            Board: 1,
         },
         {
             ID: 3,
             Title: 'Teach doo doo manners',
             Description: 'She\'s a monster!',
             DueDate: 'tomorrow',
-            Status: 0
+            Status: 0,
+            Board: 1,
         }
     ]
 };
@@ -38,7 +40,8 @@ export class BoardContainer extends React.PureComponent<Props> {
             Title,
             Description: '',
             DueDate: 'future',
-            Status: 0
+            Status: 0,
+            Board: this.state.board.ID,
         };
 
         this.setState({

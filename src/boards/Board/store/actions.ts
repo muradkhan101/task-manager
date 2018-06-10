@@ -24,17 +24,14 @@ export class AddBoard implements Action {
 }
 export class RemoveBoard implements Action {
     type = names.RemoveBoard;
-    public board: IBoard;
     constructor(public payload: BoardPayload) { }
 }
 export class RenameBoard implements Action {
     type = names.RenameBoard;
-    public board: IBoard;
     constructor(public payload: BoardPayload) { }
 }
 
 export class ReorderBoards implements Action {
     type = names.ReorderBoards;
-    public board: IBoard;
     constructor(public payload: BoardPayload) { }
 }

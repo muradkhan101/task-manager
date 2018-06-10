@@ -6,6 +6,7 @@ export interface ITask {
     Description: string;
     DueDate?: string;
     Status: TaskStatus;
+    Board: number;
 }
 
 export interface IBoard {

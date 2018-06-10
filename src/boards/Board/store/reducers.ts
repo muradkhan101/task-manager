@@ -1,7 +1,9 @@
 import * as actions from './actions';
 import { IBoard } from '../../common/interfaces';
 
-export function boards(state = [], action: actions.BoardAction) {
+type BoardState = Array<IBoard>;
+
+export function boards(state: BoardState = [], action: actions.BoardAction) {
     switch (action.type) {
         case (actions.names.AddBoard): {
             return [ ...state, action.payload.board ];

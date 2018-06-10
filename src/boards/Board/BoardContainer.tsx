@@ -6,22 +6,29 @@ import { IBoard, ITask } from '../common/interfaces';
 const boardData: IBoard = {
     ID: 1,
     Name: 'Testerino',
+    CreatedBy: 1,
+    CreateDate: Date.now(),
+    Owner: 1,
     Issues: [
         {
             ID: 2,
-            Title: 'Make test data',
+            Owner: 1,
+            Name: 'Make test data',
             Description: 'data used for testing',
             DueDate: 'today',
             Status: 1,
             Board: 1,
+            CreatedBy: 1,
         },
         {
             ID: 3,
-            Title: 'Teach doo doo manners',
+            Owner: 1,
+            Name: 'Teach doo doo manners',
             Description: 'She\'s a monster!',
             DueDate: 'tomorrow',
             Status: 0,
             Board: 1,
+            CreatedBy: 1,
         }
     ]
 };
@@ -37,11 +44,13 @@ export class BoardContainer extends React.PureComponent<Props> {
     createTask = (Title) => {
         let task: ITask = {
             ID: Math.floor(Math.random() * 10000),
-            Title,
             Description: '',
             DueDate: 'future',
             Status: 0,
             Board: this.state.board.ID,
+            Name: 'Stuff',
+            CreatedBy: 1,
+            Owner: 1
         };
 
         this.setState({

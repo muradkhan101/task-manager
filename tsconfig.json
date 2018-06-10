@@ -16,7 +16,12 @@
         "typeRoots": [
             "./typings"        ],
         "allowSyntheticDefaultImports": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "paths": {
+            "common/*": ["src/common/*"],
+            "board/*": ["src/boards/Board/*"],
+            "task/*": ["src/boards/Task/*"]
+        }
     },
     "include": [
         "src/**/*.ts"

@@ -39,9 +39,9 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
         alias: {
-            common: path.resolve(__dirname, '../src/common/'),
-            board: path.resolve(__dirname, '../src/boards/Board'),
-            task: path.resolve(__dirname, '../src/boards/Task')
+            "@app/common": path.resolve(__dirname, '../src/common/'),
+            "@app/board": path.resolve(__dirname, '../src/boards/Board'),
+            "@app/task": path.resolve(__dirname, '../src/boards/Task')
         }
     },
     optimization: {
@@ -91,7 +91,7 @@ module.exports = {
         stats: "normal",
         port: 3000,
         compress: true,
-        contentBase: path.join(__dirname, "dist"),
+        contentBase: path.join(__dirname, "../dist"),
         overlay: true,
     },
     devtool: 'eval-source-map',

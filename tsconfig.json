@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "./dist/",
+        "baseUrl": "./src",
         "noImplicitAny": false,
         "module": "es6",
         "target": "es5",
@@ -18,9 +19,9 @@
         "allowSyntheticDefaultImports": true,
         "experimentalDecorators": true,
         "paths": {
-            "common/*": ["src/common/*"],
-            "board/*": ["src/boards/Board/*"],
-            "task/*": ["src/boards/Task/*"]
+            "@app/common/*": ["src/common/*"],
+            "@app/board/*": ["src/boards/Board/*"],
+            "@app/task/*": ["src/boards/Task/*"]
         }
     },
     "include": [

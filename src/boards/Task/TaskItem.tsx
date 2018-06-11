@@ -5,7 +5,7 @@ import Checkbox from 'react-icons/lib/md/check-box';
 
 
 import { ALT_FONTS, MAIN_COLORS, ALT_COLORS } from '../../common/css';
-import { truncate } from 'common';
+import { truncate } from '@app/common';
 import { ITask, TaskStatus } from '../common/interfaces';
 
 const Task = styled('div')`

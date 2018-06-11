@@ -1,5 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { configureStore } from './storeConfig';
+
 import { BoardContainer } from './boards/Board/BoardContainer';
 import './index.scss';
 import 'whatwg-fetch';
@@ -24,8 +27,12 @@ import 'core-js/es7/string';
 import 'core-js/es7/promise';
 import 'core-js/es7/set';
 
+const store = configureStore();
+
 const App = () => (
-    <BoardContainer ID={1} />
+    <Provider store={store}>
+        <BoardContainer ID={1} />
+    </Provider>
 );
 
 render(<App/>, document.getElementById('root'));

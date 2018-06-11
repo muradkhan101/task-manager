@@ -5,12 +5,15 @@ import { boards, BoardAction } from '@app/board/store';
 import * as boardEpics from '@app/board/store/epics';
 import { tasks, TaskAction } from '@app/task/store';
 import * as taskEpics from '@app/task/store/epics';
-import { IBoard, ITask } from './boards/common/interfaces';
+import { getAll } from './epics';
+
+import { IBoard, ITask } from '../common/interfaces';
 
 // Figure how to fix the any issue and keep the array destructuring
 const combinedEpics = combineEpics(
     ...Object.values(boardEpics) as any,
     ...Object.values(taskEpics) as any,
+    getAll
 );
 const epicMiddleware = createEpicMiddleware(combinedEpics);
 
@@ -20,10 +23,17 @@ export interface StoreState {
 }
 const combinedReducers = combineReducers<StoreState>({ tasks, boards });
 
+const classToObject = store => next => action => {
+    console.log('ACTION', action);
+    let actionObject = { ...action };
+    console.log('ACTION OBJECt', actionObject);
+    return actionObject;
+}
+
 export function configureStore() {
     const store = createStore<StoreState>(
         combinedReducers,
-        applyMiddleware(epicMiddleware),
+        applyMiddleware(epicMiddleware, classToObject),
     );
     return store;
 };

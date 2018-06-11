@@ -8,7 +8,7 @@ export interface MetaAction extends Action {
     payload: { ID: number };
 }
 
-export class GetAllUserInfo implements Action {
+export class GetAllUserInfo$ implements Action {
     type = names.GetAllUserInfo$;
     payload: { ID: number };
     constructor(ID: number) {

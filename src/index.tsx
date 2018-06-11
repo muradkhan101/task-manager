@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { configureStore } from './storeConfig';
+import { configureStore } from './boards/store/storeConfig';
 
-import { BoardContainer } from './boards/Board/BoardContainer';
+import { DashboardContainer } from './boards/dashboard';
 import './index.scss';
 import 'whatwg-fetch';
 import { http, StorageHelper } from './common/helpers';
@@ -18,7 +18,7 @@ http.authFn = (options: RequestInit) => {
     }
     return options;
 };
-http.baseUrl = 'http://34.219.246.138';
+http.baseUrl = 'http://34.219.246.138/';
 
 /* Polyfills */
 import 'core-js/es7/array';
@@ -31,7 +31,7 @@ const store = configureStore();
 
 const App = () => (
     <Provider store={store}>
-        <BoardContainer ID={1} />
+        <DashboardContainer />
     </Provider>
 );
 

@@ -1,10 +1,11 @@
 import React from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { http } from '@app/common';
 
-import { GetAllUserInfo$ } from '@app/board/store';
-import { Dispatch } from 'redux';
-import { BoardContainer } from '@app/board/BoardContainer';
+import { GetAllUserInfo$ } from './store/actions';
+import { Board } from '@app/board/Board';
 import { ITask, IBoard } from './common/interfaces';
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
     tasks: Array<ITask>;
     boards: Array<IBoard>;
 }
-export class DashboardContainer extends React.Component<Props> {
+export class DashboardContainerComponent extends React.Component<Props> {
     state = {
         user: { ID: 1 }
     }
@@ -22,8 +23,27 @@ export class DashboardContainer extends React.Component<Props> {
         // Dispatch action to get everything
         // Need to make user object (login / registering) to save date for get all
     }
+    createTask = (title: string) => {
+
+    }
     render() {
-        // render boards;
-        return null;
+        let { boards, tasks } = this.props;
+        return (
+            <div>
+                {boards.map(board => <Board board={board} createTask={this.createTask} />) }
+            </div>
+        );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        tasks: state.tasks,
+        boards: state.boards,
+        dispatch: undefined,
+    };
+};
+
+export const DashboardContainer = connect(
+    mapStateToProps
+)(DashboardContainerComponent);

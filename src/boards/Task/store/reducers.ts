@@ -22,6 +22,9 @@ export function tasks(state: TaskState = [], action: actions.TaskAction) {
                 return task;
             });
         }
+        case (actions.names.AddMultipleTasks): {
+            return [...state, ...action.payload.tasks];
+        }
     }
     return state;
 }

@@ -18,6 +18,9 @@ export function boards(state: BoardState = [], action: actions.BoardAction) {
                     : board.Name;
             });
         }
+        case (actions.names.AddMultipleBoards): {
+            return [ ...state, ...action.payload.boards ];
+        }
     }
     return state;
 }

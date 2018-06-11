@@ -19,6 +19,7 @@
         "allowSyntheticDefaultImports": true,
         "experimentalDecorators": true,
         "paths": {
+            "@app/common": ["src/common"],
             "@app/common/*": ["src/common/*"],
             "@app/board/*": ["src/boards/Board/*"],
             "@app/task/*": ["src/boards/Task/*"]

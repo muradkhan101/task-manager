@@ -22,11 +22,6 @@ const getBoardQuery = (id: number) => `graphql?query={board(id:${id}){`
     + 'ID,Name,CreatedBy,CreateDate,Owner,Issues{'
     + 'ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate}}}';
 
-const getAllQuery = (userId: number) => `graphql?query={user(id:${userId}){`
-    + 'Name,Email,FirstName,LastName,Boards{'
-    + 'ID,Name,CreatedBy,CreateDate,Owner,Issues{'
-    + 'ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate}}}}';
-
 type AsyncBoardAction = ActionsObservable<actions.BoardAction>;
 
 export const addBoard = (action$: AsyncBoardAction) =>
@@ -45,12 +40,4 @@ export const getBoard = (action$) =>
     action$.ofType(actions.names.GetBoard$)
         .mergeMap( action => http.get<IBoard>(getBoardQuery(action.payload.id))
             .map(res => new actions.CreateBoard(res))
-    );
-
-export const getAll = (action$) =>
-    action$.ofType(actions.names.GetAllUserInfo$)
-        .mergeMap(action => http.get(getAllQuery(action.payload.id))
-            // Double check this part
-            .map((res: any) => res.data.user.boards)
-            .map((boards: Array<IBoard>) => new actions.GotAllUserInfo(boards))
     );

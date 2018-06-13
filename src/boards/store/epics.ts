@@ -9,17 +9,17 @@ import { concat } from 'rxjs/observable/concat';
 import { of } from 'rxjs/observable/of';
 
 const getAllQuery = (userId: number) => `graphql?query={user(id:${userId}){`
-    + 'Name,Email,FirstName,LastName,Boards{'
-    + 'ID,Name,CreatedBy,CreateDate,Owner,Issues{'
-    + 'ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate}}}}';
+    + 'ID,Email,FirstName,LastName,'
+    + 'Boards{ID,Name,CreatedBy,CreateDate,Owner},'
+    + 'Issues{ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate}}}';
 
 export const getAll = (action$) =>
     action$.ofType(actions.names.GetAllUserInfo$)
         .mergeMap(action => http.get(getAllQuery(action.payload.ID))
             // Double check this part
             // Split observable into two and concatMap to dispatch other actions
-            .map((res: any) => (console.log(res), res.data.user))
-            .map((res: any) => concat(
+            .map((res: any) => res.data.user)
+            .mergeMap((res: any) => concat(
                 of(new AddMultipleBoards(res.Boards)),
                 of(new AddMultipleTasks(res.Issues))
             ))

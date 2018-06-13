@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import { http } from '@app/common';
 
 import { GetAllUserInfo$ } from './store/actions';
-import { Board } from '@app/board/Board';
+import { BoardContainer } from '@app/board/BoardContainer';
 import { ITask, IBoard } from './common/interfaces';
 
 interface Props {
@@ -28,9 +28,14 @@ export class DashboardContainerComponent extends React.Component<Props> {
     }
     render() {
         let { boards, tasks } = this.props;
+        console.log(this.props);
         return (
             <div>
-                {boards.map(board => <Board board={board} createTask={this.createTask} />) }
+                {boards.map(board => {
+                    let issues = tasks.filter(task => task.Board === board.ID);
+                    return <BoardContainer board={board} issues={issues} key={board.ID} />;
+                })
+            }
             </div>
         );
     }

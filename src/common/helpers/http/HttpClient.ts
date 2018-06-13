@@ -57,8 +57,6 @@ export class HttpClient {
         return of(err);
     }
     private baseFetch<T>(url: string, options: RequestInit): Observable<T> {
-        console.log(JSON.stringify(this._authFn(options)))
-        console.log(JSON.stringify(this._authFn(options)))
         return fromPromise(
             fetch(this._baseUrl + url, {
                 ...this._authFn(options),

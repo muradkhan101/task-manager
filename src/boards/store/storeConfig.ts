@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, Action } from 'redux';
 import { createEpicMiddleware, combineEpics, Epic } from 'redux-observable';
+import { Observable } from 'rxjs/Observable';
 
 import { boards, BoardAction } from '@app/board/store';
 import * as boardEpics from '@app/board/store/epics';
@@ -24,16 +25,17 @@ export interface StoreState {
 const combinedReducers = combineReducers<StoreState>({ tasks, boards });
 
 const classToObject = store => next => action => {
-    console.log('ACTION', action);
-    let actionObject = { ...action };
-    console.log('ACTION OBJECt', actionObject);
-    return actionObject;
+    let actionObject = action;
+    if ( !(action instanceof Observable) ) {
+         actionObject = { ...action };
+    }
+    return next(actionObject);
 }
 
 export function configureStore() {
     const store = createStore<StoreState>(
         combinedReducers,
-        applyMiddleware(epicMiddleware, classToObject),
+        applyMiddleware(classToObject, epicMiddleware),
     );
     return store;
 };

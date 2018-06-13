@@ -5,7 +5,7 @@ type BoardState = Array<IBoard>;
 
 export function boards(state: BoardState = [], action: actions.BoardAction) {
     switch (action.type) {
-        case (actions.names.AddBoard): {
+        case (actions.names.CreateBoard): {
             return [ ...state, action.payload.board ];
         }
         case (actions.names.RemoveBoard): {
@@ -17,6 +17,9 @@ export function boards(state: BoardState = [], action: actions.BoardAction) {
                     ? action.payload.updates.Name
                     : board.Name;
             });
+        }
+        case (actions.names.AddMultipleBoards): {
+            return [ ...state, ...action.payload.boards ];
         }
     }
     return state;

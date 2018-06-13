@@ -10,7 +10,7 @@ const extractCss = new CssExtractPlugin({
 
 module.exports = {
     entry: {
-        'main': './src/index.tsx',
+        'main': path.resolve(__dirname, '../src/index.tsx'),
     },
     module: {
         rules: [
@@ -37,7 +37,12 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            "@app/common": path.resolve(__dirname, '../src/common/'),
+            "@app/board": path.resolve(__dirname, '../src/boards/Board'),
+            "@app/task": path.resolve(__dirname, '../src/boards/Task')
+        }
     },
     optimization: {
         splitChunks: {
@@ -86,7 +91,7 @@ module.exports = {
         stats: "normal",
         port: 3000,
         compress: true,
-        contentBase: path.join(__dirname, "dist"),
+        contentBase: path.join(__dirname, "../dist"),
         overlay: true,
     },
     devtool: 'eval-source-map',

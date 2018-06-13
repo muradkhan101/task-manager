@@ -2,62 +2,47 @@ import React from 'react';
 
 import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
-
-const boardData: IBoard = {
-    ID: 1,
-    Name: 'Testerino',
-    Issues: [
-        {
-            ID: 2,
-            Title: 'Make test data',
-            Description: 'data used for testing',
-            DueDate: 'today',
-            Status: 1,
-            Board: 1,
-        },
-        {
-            ID: 3,
-            Title: 'Teach doo doo manners',
-            Description: 'She\'s a monster!',
-            DueDate: 'tomorrow',
-            Status: 0,
-            Board: 1,
-        }
-    ]
-};
+import { TaskItem } from '../Task/TaskItem';
 
 interface Props {
-    ID: number;
+    board: IBoard;
+    issues: Array<ITask>;
 }
 export class BoardContainer extends React.PureComponent<Props> {
-    state: { board: IBoard } = {
-        board: boardData
-    };
 
     createTask = (Title) => {
         let task: ITask = {
-            ID: Math.floor(Math.random() * 10000),
-            Title,
+            ID: -1,
             Description: '',
             DueDate: 'future',
             Status: 0,
-            Board: this.state.board.ID,
+            Board: this.props.board.ID,
+            Name: Title,
+            CreatedBy: 1,
+            Owner: 1
         };
 
         this.setState({
-            board: Object.assign({}, this.state.board, { Issues: this.state.board.Issues.concat(task) }),
+            board: Object.assign({}, this.props.board, { Issues: this.props.board.Issues.concat(task) }),
             tempTask: null
         });
         // Make temp task
         // If someone enters that, append to array and dispatch AJAX
     }
-    getBoardData() {
+    toggleTaskStatus = (id: number) => {
+        // do a thing
+    }
+    getBoardData = () => {
         // Do AJAX
     }
     render() {
-        const { board } = this.state;
+        const { board, issues } = this.props;
         return (
-            <Board board={board} createTask={this.createTask} />
+            <Board board={board} createTask={this.createTask} >
+                {issues.filter(issue => issue.Board === board.ID)
+                    .map(issue => <TaskItem key={issue.ID} boardID={board.ID} click={this.toggleTaskStatus} {...issue} />)
+                }
+            </Board>
         );
     }
 }

@@ -4,11 +4,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyPlugin = require('uglifyjs-webpack-plugin');
 const extractCss = new CssExtractPlugin({
-    filename: './dist/assets/app.css'
+    filename: path.resolve(__dirname, '../dist/assets/app.css')
 });
 
 module.exports = {
-    entry: './src/index.tsx',
+    entry: {
+        'main': path.resolve(__dirname, '../src/index.tsx'),
+    },
     module: {
         rules: [
             {
@@ -23,8 +25,8 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
-                test: /\.scss$/,
-                include: [path.resolve(__dirname, 'src', 'assets', 'scss')],
+                test: /\.s?css$/,
+                // include: [path.resolve(__dirname, 'src', 'assets', 'scss')],
                 use: [
                     CssExtractPlugin.loader,
                     'css-loader',
@@ -34,7 +36,12 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            "@app/common": path.resolve(__dirname, '../src/common/'),
+            "@app/board": path.resolve(__dirname, '../src/boards/Board'),
+            "@app/task": path.resolve(__dirname, '../src/boards/Task')
+        }
     },
     optimization: {
         splitChunks: {

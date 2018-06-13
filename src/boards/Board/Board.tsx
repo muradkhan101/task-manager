@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import styled from 'react-emotion';
 import FaPlus from 'react-icons/lib/fa/plus';
 
 import { MAIN_COLORS } from '../../common/css';
 import { ITask, IBoard } from '../common/interfaces';
-import { TaskItemContainer } from '../Task/TaskItemContainer';
 
 const BoardContainer = styled('div')`
     display: flex;
@@ -63,11 +62,14 @@ export class Board extends Component<Props> {
     }
     render() {
         const { tempTask } = this.state;
-        const { board } = this.props;
+        const { children } = this.props;
+        const newChildren = React.Children.map(children, (child: React.ReactElement<any>) => {
+            return React.cloneElement(child, {boardID: this.props.board.ID});
+        });
         return (
             <BoardContainer>
                 <TaskContainer>
-                    {board.Issues.map(issue => <TaskItemContainer task={issue} key={issue.ID} />)}
+                    {newChildren}
                 </TaskContainer>
                 { tempTask === null
                     ? <TaskAdder onClick={() => this.setState({tempTask: ''})}>

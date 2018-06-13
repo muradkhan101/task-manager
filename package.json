@@ -4,6 +4,7 @@
   "description": "A trello-esque task management app",
   "main": "index.js",
   "dependencies": {
+    "@types/react-redux": "^6.0.2",
     "@types/whatwg-fetch": "0.0.33",
     "core-js": "^2.5.7",
     "emotion": "^9.1.0",
@@ -14,6 +15,7 @@
     "react-icons": "^2.2.7",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
+    "redux-observable": "^0.19.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.7"
   },

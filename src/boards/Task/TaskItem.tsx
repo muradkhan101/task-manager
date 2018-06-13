@@ -4,8 +4,8 @@ import BlankCheckbox from 'react-icons/lib/md/check-box-outline-blank';
 import Checkbox from 'react-icons/lib/md/check-box';
 
 
-import { ALT_FONTS, MAIN_COLORS, ALT_COLORS } from '../../common/css';
-import { truncate } from '../../common';
+import { ALT_COLORS } from '../../common/css';
+import { truncate } from '@app/common';
 import { ITask, TaskStatus } from '../common/interfaces';
 
 const Task = styled('div')`
@@ -16,15 +16,16 @@ const Task = styled('div')`
 `;
 
 interface Props extends ITask {
+    boardID: number;
     click: (id: number) => any;
 }
 export class TaskItem extends PureComponent<Props> {
     render() {
-        const { Title, Description, DueDate, Status, ID, click } = this.props;
+        const { Name, Description, DueDate, Status, ID, click } = this.props;
         return (
             <Task>
                 <div>
-                    <h3>{Title}</h3>
+                    <h3>{Name}</h3>
                     <p> {truncate(Description, 20)} </p>
                     <span>{DueDate}</span>
                 </div>

@@ -26,27 +26,27 @@ export class HttpClient {
     ) { }
     set baseUrl(url: string) { this._baseUrl = url; }
     set authFn (fn: AuthFn) { this._authFn = fn; }
-    get(url, options = defaultHeaders) {
-        return this.baseFetch(url, {
+    get<T>(url, options = defaultHeaders): Observable<T> {
+        return this.baseFetch<T>(url, {
             ...options,
             method: 'GET'
         });
     }
-    post(url, body, options = defaultHeaders) {
-        return this.baseFetch(url, {
+    post<T>(url, body, options = defaultHeaders): Observable<T> {
+        return this.baseFetch<T>(url, {
             ...options,
             method: 'POST',
             body: JSON.stringify(body)
         });
     }
-    put(url, body, options = defaultHeaders) {
+    put<T>(url, body, options = defaultHeaders): Observable<T> {
         return this.baseFetch(url, {
             ...options,
             method: 'PUT',
             body: JSON.stringify(body)
         });
     }
-    delete(url, options = defaultHeaders) {
+    delete<T>(url, options = defaultHeaders): Observable<T> {
         return this.baseFetch(url, {
             ...options,
             method: 'DELETE'
@@ -56,7 +56,7 @@ export class HttpClient {
         console.log(`Call to ${err.url} failed`);
         return of(err);
     }
-    private baseFetch(url: string, options: RequestInit): Observable<Response> {
+    private baseFetch<T>(url: string, options: RequestInit): Observable<T> {
         return fromPromise(
             fetch(this._baseUrl + url, {
                 ...this._authFn(options),

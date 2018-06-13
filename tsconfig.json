@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
         "outDir": "./dist/",
+        "baseUrl": "./src",
         "noImplicitAny": false,
-        "module": "es6",
+        "module": "es2015",
         "target": "es5",
         "sourceMap": true,
         "jsx": "react",
@@ -16,7 +17,13 @@
         "typeRoots": [
             "./typings"        ],
         "allowSyntheticDefaultImports": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "paths": {
+            "@app/common": ["src/common"],
+            "@app/common/*": ["src/common/*"],
+            "@app/board/*": ["src/boards/Board/*"],
+            "@app/task/*": ["src/boards/Task/*"]
+        }
     },
     "include": [
         "src/**/*.ts"

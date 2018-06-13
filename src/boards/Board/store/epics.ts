@@ -31,9 +31,9 @@ export const addBoard = (action$: AsyncBoardAction) =>
         );
 
 export const renameBoard = (action$: AsyncBoardAction) =>
-    action$.ofType(actions.names.RenameBoard$)
+    action$.ofType(actions.names.UpdateBoard$)
         .mergeMap( action => http.get<IBoard>(updateBoardMutations(action.payload.board, action.payload.updates))
-            .map(res => new actions.RenameBoard(res, action.payload.updates))
+            .map(res => new actions.UpdateBoard(res, action.payload.updates))
     );
 
 export const getBoard = (action$) =>

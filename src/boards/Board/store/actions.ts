@@ -14,12 +14,12 @@ export interface BoardAction extends Action {
 export const names = {
     CreateBoard: 'CREATE_BOARD',
     RemoveBoard: 'REMOVE_BOARD',
-    RenameBoard: 'RENAME_BOARD',
+    UpdateBoard: 'RENAME_BOARD',
     ReorderBoards: 'REORDER_BOARDS',
     AddMultipleBoards: 'ADD_MULTIPLE_BOARDS',
     CreateBoard$: 'CREATE_BOARD$',
     RemoveBoard$: 'REMOVE_BOARD$',
-    RenameBoard$: 'RENAME_BOARD$',
+    UpdateBoard$: 'RENAME_BOARD$',
     ReorderBoards$: 'REORDER_BOARDS$',
     GetBoard$: 'GET_BOARD$',
 };
@@ -39,8 +39,8 @@ export class RemoveBoard implements BoardAction {
         this.payload = { board };
     }
 }
-export class RenameBoard implements BoardAction {
-    type = names.RenameBoard;
+export class UpdateBoard implements BoardAction {
+    type = names.UpdateBoard;
     public payload: BoardPayload;
     constructor(board: IBoard, updates = {}) {
         this.payload = { board, updates };
@@ -67,8 +67,8 @@ export class CreateBoard$ extends CreateBoard {
 export class RemoveBoard$ extends RemoveBoard {
     type = names.RemoveBoard$;
 }
-export class RenameBoard$ extends RenameBoard {
-    type = names.RenameBoard$;
+export class UpdateBoard$ extends UpdateBoard {
+    type = names.UpdateBoard$;
 }
 export class ReorderBoards$ extends ReorderBoards {
     type = names.ReorderBoards$;

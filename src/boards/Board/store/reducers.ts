@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import { IBoard } from '../../common/interfaces';
+import { IBoard, ITask } from '../../common/interfaces';
 
 type BoardState = Array<IBoard>;
 
@@ -11,7 +11,7 @@ export function boards(state: BoardState = [], action: actions.BoardAction) {
         case (actions.names.RemoveBoard): {
             return state.filter((board: IBoard) => board.ID !== action.payload.board.ID);
         }
-        case (actions.names.RenameBoard): {
+        case (actions.names.UpdateBoard): {
             return state.map((board: IBoard) => {
                 board.Name = board.ID === action.payload.board.ID
                     ? action.payload.updates.Name
@@ -24,3 +24,6 @@ export function boards(state: BoardState = [], action: actions.BoardAction) {
     }
     return state;
 }
+
+export const getBoardIssues = (issues: Array<ITask>, boardId: number) =>
+    issues.filter(issue => issue.Board === boardId);

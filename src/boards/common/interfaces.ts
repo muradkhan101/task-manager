@@ -15,7 +15,7 @@ export interface IBoard {
     ID: number;
     Name: string;
     CreatedBy: number;
-    CreateDate: number;
+    CreateDate: string;
     Owner: number;
     Issues: Array<ITask>;
 }

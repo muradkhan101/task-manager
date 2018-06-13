@@ -9,6 +9,7 @@ const BoardContainer = styled('div')`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 12px 16px;
     width: 350px;
 `;
 

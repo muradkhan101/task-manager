@@ -3,34 +3,31 @@ import React from 'react';
 import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
 import { TaskItem } from '../Task/TaskItem';
-
+import { Dispatch } from 'redux';
+import { AddTask$ } from '../Task/store';
 interface Props {
     board: IBoard;
     issues: Array<ITask>;
+    dispatch: Dispatch<any>;
 }
 export class BoardContainer extends React.PureComponent<Props> {
-
+    
     createTask = (Title) => {
         let task: ITask = {
             ID: -1,
             Description: '',
-            DueDate: 'future',
+            DueDate: (new Date()).toISOString(),
             Status: 0,
             Board: this.props.board.ID,
             Name: Title,
             CreatedBy: 1,
             Owner: 1
         };
-
-        this.setState({
-            board: Object.assign({}, this.props.board, { Issues: this.props.board.Issues.concat(task) }),
-            tempTask: null
-        });
-        // Make temp task
-        // If someone enters that, append to array and dispatch AJAX
+        this.props.dispatch(new AddTask$(task));
     }
     toggleTaskStatus = (id: number) => {
         // do a thing
+        console.log(id);
     }
     getBoardData = () => {
         // Do AJAX

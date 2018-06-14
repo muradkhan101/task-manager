@@ -4,19 +4,18 @@ import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
 import { TaskItem } from '../Task/TaskItem';
 import { Dispatch } from 'redux';
-import { AddTask$ } from '../Task/store';
+import { AddTask$, UpdateTask$ } from '../Task/store';
 interface Props {
     board: IBoard;
     issues: Array<ITask>;
     dispatch: Dispatch<any>;
 }
 export class BoardContainer extends React.PureComponent<Props> {
-    
     createTask = (Title) => {
         let task: ITask = {
             ID: -1,
             Description: '',
-            DueDate: (new Date()).toISOString(),
+            CreateDate: (new Date()).toISOString(),
             Status: 0,
             Board: this.props.board.ID,
             Name: Title,
@@ -26,8 +25,9 @@ export class BoardContainer extends React.PureComponent<Props> {
         this.props.dispatch(new AddTask$(task));
     }
     toggleTaskStatus = (id: number) => {
-        // do a thing
-        console.log(id);
+        let item = this.props.issues.filter(issue => issue.ID === id)[0];
+        if (item)
+            this.props.dispatch(new UpdateTask$(item, {Status: Number(!item.Status)}));
     }
     getBoardData = () => {
         // Do AJAX

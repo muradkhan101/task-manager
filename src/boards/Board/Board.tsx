@@ -1,7 +1,7 @@
-import React, { Component, ReactElement } from 'react';
+import React, { Component } from 'react';
 import styled from 'react-emotion';
 import FaPlus from 'react-icons/lib/fa/plus';
-
+import { TextToInput } from './TextToInput';
 import { MAIN_COLORS } from '../../common/css';
 import { ITask, IBoard } from '../common/interfaces';
 
@@ -54,11 +54,14 @@ export class Board extends Component<Props> {
     updateTask = (e) => {
         this.setState({tempTask: e.target.value});
     }
-    handleKey = ({charCode}) => {
-        if (charCode === 13) {
-            this.props.createTask(this.state.tempTask);
-            this.setState({tempTask: null});
-        }
+    // handleKey = ({charCode}) => {
+    //     if (charCode === 13) {
+    //         this.props.createTask(this.state.tempTask);
+    //         this.setState({tempTask: null});
+    //     }
+    // }
+    submit = (text) => {
+        this.props.createTask(text);
     }
     render() {
         const { tempTask } = this.state;
@@ -71,12 +74,12 @@ export class Board extends Component<Props> {
                 <TaskContainer>
                     {newChildren}
                 </TaskContainer>
-                { tempTask === null
-                    ? <TaskAdder onClick={() => this.setState({tempTask: ''})}>
+                {<TextToInput text={''} submit={this.submit} >
+                    <TaskAdder onClick={() => this.setState({ tempTask: '' })}>
                         <h3>Create Task</h3>
-                        <FaPlus/>
+                        <FaPlus />
                     </TaskAdder>
-                    : <TaskInput value={tempTask} onKeyPress={this.handleKey} onChange={this.updateTask}/>
+                </TextToInput>
                 }
             </BoardContainer>
         );

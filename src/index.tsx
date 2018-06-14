@@ -20,6 +20,8 @@ http.authFn = (options: RequestInit) => {
 };
 http.baseUrl = 'http://34.219.246.138/';
 
+import { TextToInput } from './boards/Board/TextToInput';
+
 /* Polyfills */
 import 'core-js/es7/array';
 import 'core-js/es7/map';
@@ -31,6 +33,7 @@ const store = configureStore();
 
 const App = () => (
     <Provider store={store}>
+        {/* <TextToInput  submit={(test)=>console.log(test)} text={'Temporary'} theme={{}}> <h1>Testing 1 2 3</h1></TextToInput> */}
         <DashboardContainer />
     </Provider>
 );

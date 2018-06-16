@@ -5,14 +5,42 @@ import { IBoard, ITask } from '../common/interfaces';
 import { OrderedTaskItem } from '../Task/OrderedTaskItem';
 import { Dispatch } from 'redux';
 import { AddTask$, UpdateTask$ } from '../Task/store';
+
+import { ItemTypes } from '../dragDrop';
+import { DropTarget, DropTargetConnector, DropTargetMonitor, ConnectDropTarget } from 'react-dnd';
+
+const taskTarget = {
+    drop(props: Props, monitor: DropTargetMonitor, component) {
+        // The args for the item being dropped one
+        // The return will be passed to the dropEnd
+        console.log(monitor.getItem());
+        return { boardId: props.board.ID };
+    },
+    canDrop(props: Props, monitor: DropTargetMonitor) {
+        let dragItem = monitor.getItem();
+        // Lets you differentiate between dragging tasks on the same board
+        // and dragging tasks between boards
+        return dragItem.boardId !== props.board.ID;
+    }
+};
+
+function collect(connect: DropTargetConnector, monitor: DropTargetMonitor) {
+    return {
+        connectDropTarget: connect.dropTarget(),
+        isOver: monitor.isOver()
+    };
+}
+
 interface Props {
     board: IBoard;
     issues: Array<ITask>;
     dispatch: Dispatch<any>;
+    connectDropTarget?: any;
 }
 // This will handle create, update, delete, etc
 // Could split echo of those functionalities out into a decorator or something
 // Composeable CRUD
+@DropTarget([ItemTypes.BOARD, ItemTypes.TASK], taskTarget, collect)
 export class BoardContainer extends React.PureComponent<Props> {
     createTask = (Title) => {
         let task: ITask = {
@@ -43,16 +71,18 @@ export class BoardContainer extends React.PureComponent<Props> {
         // Thats  how thunking works there, since values cant be altered once created
         // dont need to calculate until last second because guarantee of correct operation
         // JIT compiling could be like this, gives assurance of value when needed
-        const { board, issues } = this.props;
-        return (
-            <Board board={board} createTask={this.createTask} >
-                 {/* Can the filter be removed without passing unnecessary-to-render data (boardID)
-                 and doing something like passing a function that renders the data whenn it needs it */}
-                {issues.filter(issue => issue.Board === board.ID)
-                    .map((issue, i) =>
-                        <OrderedTaskItem index={i} key={issue.ID} boardId={board.ID} click={this.toggleTaskStatus} task={issue} />)
-                }
-            </Board>
+        const { board, issues, connectDropTarget } = this.props;
+        return connectDropTarget(
+            <div>
+                <Board board={board} createTask={this.createTask} >
+                    {/* Can the filter be removed without passing unnecessary-to-render data (boardID)
+                    and doing something like passing a function that renders the data whenn it needs it */}
+                    {issues.filter(issue => issue.Board === board.ID)
+                        .map((issue, i) =>
+                            <OrderedTaskItem index={i} key={issue.ID} boardId={board.ID} click={this.toggleTaskStatus} task={issue} />)
+                    }
+                </Board>
+            </div>
         );
     }
 }

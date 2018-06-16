@@ -11,15 +11,26 @@ import { ITask, TaskStatus } from '../common/interfaces';
 import { ItemTypes } from '../dragDrop';
 import { DragSourceMonitor, DragSourceConnector, DragSource, DragElementWrapper } from 'react-dnd';
 const taskSource = {
-    beginDrag(props) {
-        return { ID: props.ID };
+    beginDrag(props: Props) {
+        return { taskId: props.ID, boardId: props.Board, type: ItemTypes.TASK };
+    },
+    endDrag(props: Props, monitor: DragSourceMonitor, component: TaskItem) {
+        let dropResult = monitor.getDropResult();
+        if (dropResult) {
+            console.log('THIS ITEM', {ID: props.ID, board: props.Board});
+            console.log('DROP RESULT', dropResult);
+            // Do dispatch
+        }
+    },
+    isDragging(props: Props, monitor: DragSourceMonitor) {
+        return props.ID === monitor.getItem().taskId;
     }
 };
 
 function collect(connect: DragSourceConnector , monitor: DragSourceMonitor) {
     return {
         connectDragSource: connect.dragSource(),
-        isDragging: monitor.isDragging()
+        isDragging: monitor.isDragging(),
     };
 }
 

@@ -5,10 +5,11 @@ import { ItemTypes } from '../dragDrop';
 import { DropTarget, DropTargetConnector, DropTargetMonitor, ConnectDropTarget } from 'react-dnd';
 
 const taskTarget = {
-    drop(props) {
-        console.log(props.index);
-        // dispatch move item in array
-        // how to get first item reference
+    drop(props: Props, monitor: DropTargetMonitor, component) {
+        // The args for the item being dropped one
+        // The return will be passed to the dropEnd
+        console.log(monitor.getItem());
+        return { taskId: props.task.ID, boardId: props.boardId, index: props.index };
     }
 };
 

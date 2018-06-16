@@ -7,6 +7,7 @@ import { AddMultipleBoards } from '@app/board/store';
 import { AddMultipleTasks } from '@app/task/store';
 import { concat } from 'rxjs/observable/concat';
 import { of } from 'rxjs/observable/of';
+import { filterOnProperty } from '@app/common';
 
 const getAllQuery = (userId: number) => `graphql?query={user(id:${userId}){`
     + 'ID,Email,FirstName,LastName,'
@@ -18,7 +19,7 @@ export const getAll = (action$) =>
         .mergeMap(action => http.get(getAllQuery(action.payload.ID))
             // Double check this part
             // Split observable into two and concatMap to dispatch other actions
-            .map((res: any) => res.data.user)
+            .pipe(filterOnProperty('user'))
             .mergeMap((res: any) => concat(
                 of(new AddMultipleBoards(res.Boards)),
                 of(new AddMultipleTasks(res.Issues))

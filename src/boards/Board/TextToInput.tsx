@@ -1,13 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled, { css } from 'react-emotion';
 import { MAIN_FONTS } from '@app/common';
 
-const darkHover = props => css({
-    backgroundColor: props.theme.backgroundColor || '#d0d0d0',
-});
-
 const hover = props => css({
-    ':hover': darkHover(props)
+    ':hover': { backgroundColor: props.theme.backgroundColor || '#d0d0d0',}
 });
 
 const Wrapper = styled('div')`
@@ -41,8 +37,7 @@ const Input = styled('input')`
         outline: 2px solid #4286f4;
         box-shadow: 0px 1px 1px rgba(50,50,50,0.2);
     }
-`
-
+`;
 
 interface Props {
     text: string;

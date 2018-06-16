@@ -13,7 +13,7 @@ const BoardContainer = styled('div')`
     width: 350px;
 `;
 
-const TaskContainer = styled('div')`
+const TasksContainer = styled('div')`
     padding: 12px 8px;
 `;
 
@@ -24,11 +24,6 @@ const BottomText = styled('div')`
     padding: 8px 8px;
     background: white;
     color: ${MAIN_COLORS.grassy};
-`;
-
-const TaskInput = styled('input')`
-    border: none;
-    border: 1px solid ${MAIN_COLORS.grassy};
 `;
 
 interface Props {
@@ -78,14 +73,14 @@ export class Board extends Component<Props> {
         });
         return (
             <BoardContainer>
-                <TaskContainer>
+                <TasksContainer>
                     {newChildren}
-                </TaskContainer>
+                </TasksContainer>
                 {<TextToInput text={''} submit={this.submit} >
-                    <BottomText onClick={() => this.setState({ tempTask: '' })}>
+                    {/* <BottomText onClick={() => this.setState({ tempTask: '' })}>
                         <h3>Create Task</h3>
                         <FaPlus />
-                    </BottomText>
+                    </BottomText> */}
                 </TextToInput>
                 }
             </BoardContainer>

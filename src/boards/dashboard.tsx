@@ -1,6 +1,9 @@
 import React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
 import styled from 'react-emotion';
 
 import { GetAllUserInfo$ } from './store/actions';
@@ -32,14 +35,14 @@ interface Props {
     boards: Array<IBoard>;
     dispatch: Dispatch<any>;
 }
+@DragDropContext(HTML5Backend)
 export class DashboardContainerComponent extends React.Component<Props> {
     state = {
         user: { ID: 1 }
-    }
+    };
     componentWillMount() {
         // Need to split into two API calls
         this.props.dispatch(new GetAllUserInfo$(this.state.user.ID));
-        console.log(this.props);
         // Dispatch action to get everything
         // Need to make user object (login / registering) to save date for get all
     }
@@ -48,6 +51,7 @@ export class DashboardContainerComponent extends React.Component<Props> {
     }
     render() {
         let { boards, tasks, dispatch } = this.props;
+        console.log(this.props);
         return (
             <Boards>
                 {boards.map(board => {

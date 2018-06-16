@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
-import { TaskItem } from '../Task/TaskItem';
+import { OrderedTaskItem } from '../Task/OrderedTaskItem';
 import { Dispatch } from 'redux';
 import { AddTask$, UpdateTask$ } from '../Task/store';
 interface Props {
@@ -46,10 +46,11 @@ export class BoardContainer extends React.PureComponent<Props> {
         const { board, issues } = this.props;
         return (
             <Board board={board} createTask={this.createTask} >
-                // Can the filter be removed without passing unnecessary-to-render data (boardID)
-                // and doing something like passing a function that renders the data whenn it needs it
+                 {/* Can the filter be removed without passing unnecessary-to-render data (boardID)
+                 and doing something like passing a function that renders the data whenn it needs it */}
                 {issues.filter(issue => issue.Board === board.ID)
-                    .map(issue => <TaskItem key={issue.ID} boardID={board.ID} click={this.toggleTaskStatus} {...issue} />)
+                    .map((issue, i) =>
+                        <OrderedTaskItem index={i} key={issue.ID} boardId={board.ID} click={this.toggleTaskStatus} task={issue} />)
                 }
             </Board>
         );

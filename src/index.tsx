@@ -31,11 +31,11 @@ import 'core-js/es7/set';
 
 const store = configureStore();
 
+// <TextToInput  submit={(test)=>console.log(test)} text={'Temporary'} theme={{fontSize: '24px', fontFamily:'system-ui,sans-serif',color:'#313131'}}> <h1>Testing 1 2 3</h1></TextToInput>
 const App = () => (
-    // <Provider store={store}>
-        <TextToInput  submit={(test)=>console.log(test)} text={'Temporary'} theme={{fontSize: '24px', fontFamily:'system-ui,sans-serif',color:'#313131'}}> <h1>Testing 1 2 3</h1></TextToInput>
-        //  <DashboardContainer />
-    // </Provider>
+    <Provider store={store}>
+        <DashboardContainer />
+    </Provider>
 );
 
 render(<App/>, document.getElementById('root'));

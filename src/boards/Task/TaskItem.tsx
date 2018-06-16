@@ -33,7 +33,7 @@ export class TaskItem extends PureComponent<Props> {
             <Task>
                 <div>
                     <h3>{Name}</h3>
-                    <p> {truncate(Description, 20)} </p>
+                    <p>{truncate(Description, 20)}</p>
                     <span>{DueDate}</span>
                 </div>
                 <div onClick={() => click(ID)}>

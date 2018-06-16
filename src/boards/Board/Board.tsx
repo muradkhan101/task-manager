@@ -9,6 +9,7 @@ const BoardContainer = styled('div')`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 12px 16px;
     width: 350px;
 `;
 
@@ -16,7 +17,7 @@ const TaskContainer = styled('div')`
     padding: 12px 8px;
 `;
 
-const TaskAdder = styled('div')`
+const BottomText = styled('div')`
     display: flex;
     border-top: 1px solid ${MAIN_COLORS.grassy};
     justify-content: space-between;
@@ -34,11 +35,14 @@ interface Props {
     board: IBoard;
     createTask: (title: string) => void;
 }
+// This component  displays Issues AND adds a Task
+// Could split "text adding" ability into own component
+// Styling applys here too. (BAsically themes in React)
 export class Board extends Component<Props> {
     state = {
         tempTask: null
     };
-    toggleTaskStatus = (id) => {
+    // toggleTaskStatus = (id) => {
         // Should the board know how to update a to-do status?
         // Or should it be the main page itself that handles that shizz?
         // Probably whatever is doing the AJAX call for the boards
@@ -50,8 +54,11 @@ export class Board extends Component<Props> {
         //     return issue;
         // });
         // this.setState({board: Object.assign({issues}, this.state.board, )});
-    }
-    updateTask = (e) => {
+    // }
+    // After refactor, thils would still just manage internal state
+    // I think that is good sign of code structure
+    // We just take one functionality out and replace it with similar and it still works
+    updateInternalTask = (e) => {
         this.setState({tempTask: e.target.value});
     }
     // handleKey = ({charCode}) => {
@@ -75,10 +82,10 @@ export class Board extends Component<Props> {
                     {newChildren}
                 </TaskContainer>
                 {<TextToInput text={''} submit={this.submit} >
-                    <TaskAdder onClick={() => this.setState({ tempTask: '' })}>
+                    <BottomText onClick={() => this.setState({ tempTask: '' })}>
                         <h3>Create Task</h3>
                         <FaPlus />
-                    </TaskAdder>
+                    </BottomText>
                 </TextToInput>
                 }
             </BoardContainer>

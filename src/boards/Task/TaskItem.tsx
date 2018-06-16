@@ -19,10 +19,17 @@ interface Props extends ITask {
     boardID: number;
     click: (id: number) => any;
 }
+// Why are there store files in this directory?
+// Move them out if this will just ba pure a component
+// Leave them if you want to make more compomnents around this
 export class TaskItem extends PureComponent<Props> {
     render() {
         const { Name, Description, DueDate, Status, ID, click } = this.props;
         return (
+            // This could be a themed component
+            // Pass classes and stuff to it
+            // Renders them with tree recursion
+            // Explained: Assigns classes by expectation of placements
             <Task>
                 <div>
                     <h3>{Name}</h3>

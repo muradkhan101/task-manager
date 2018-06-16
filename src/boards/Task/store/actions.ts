@@ -12,15 +12,15 @@ export interface TaskAction extends Action {
 }
 
 export const names = {
-    AddTask: 'ADD_BOARD',
-    RemoveTask: 'REMOVE_BOARD',
-    UpdateTask: 'RENAME_BOARD',
-    ReorderTask: 'REORDER_BOARDS',
+    AddTask: 'ADD_TASK',
+    RemoveTask: 'REMOVE_TASK',
+    UpdateTask: 'RENAME_TASK',
+    ReorderTask: 'REORDER_TASKS',
     AddMultipleTasks: 'ADD_MULTIPLE_TASKS',
-    AddTask$: 'ADD_BOARD$',
-    RemoveTask$: 'REMOVE_BOARD$',
-    UpdateTask$: 'RENAME_BOARD$',
-    ReorderTask$: 'REORDER_BOARDS$',
+    AddTask$: 'ADD_TASK$',
+    RemoveTask$: 'REMOVE_TASK$',
+    UpdateTask$: 'RENAME_TASK$',
+    ReorderTask$: 'REORDER_TASK$',
 };
 
 export class AddTask implements TaskAction {

@@ -2,20 +2,21 @@ export enum TaskStatus { IN_PROGRESS, DONE }
 
 export interface ITask {
     ID: number;
-    Name: string;
-    Description: string;
-    CreatedBy: number;
-    Owner: number;
-    DueDate?: string;
-    Status: TaskStatus;
     Board: number;
+    CreateDate: string;
+    CreatedBy: number;
+    Description: string;
+    DueDate?: string;
+    Name: string;
+    Owner: number;
+    Status: TaskStatus;
 }
 
 export interface IBoard {
     ID: number;
-    Name: string;
+    CreateDate: string;
     CreatedBy: number;
-    CreateDate: number;
-    Owner: number;
     Issues: Array<ITask>;
+    Name: string;
+    Owner: number;
 }

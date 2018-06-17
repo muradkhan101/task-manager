@@ -49,14 +49,34 @@ export class DashboardContainerComponent extends React.Component<Props> {
     createTask = (title: string) => {
 
     }
+    reorderBoards = (oldPos: number, newPos: number) => {
+        // let tasks = this.props.issues.filter(task => task.Board === this.props.board.ID);
+        const boards = this.props.boards.slice();
+        console.log(oldPos, newPos);
+        let itemToMove = boards.splice(oldPos, 1)[0];
+        console.log(itemToMove);
+        let newArr = [
+            ...boards.slice(0, newPos),
+            itemToMove,
+            ...boards.slice(newPos)
+        ];
+        console.log(newArr);
+        return newArr;
+    }
     render() {
         let { boards, tasks, dispatch } = this.props;
         console.log(this.props);
         return (
             <Boards>
-                {boards.map(board => {
+                {boards.map((board, i) => {
                     let issues = tasks.filter(task => task.Board === board.ID);
-                    return <BoardContainer dispatch={dispatch} board={board} issues={issues} key={board.ID} />;
+                    return <BoardContainer
+                        dispatch={dispatch}
+                        board={board}
+                        issues={issues}
+                        index={i}
+                        reorderBoards={this.reorderBoards}
+                        key={board.ID} />;
                 })
             }
             </Boards>

@@ -10,9 +10,17 @@ import { of } from 'rxjs/observable/of';
 import { filterOnProperty } from '@app/common';
 
 const getAllQuery = (userId: number) => `graphql?query={user(id:${userId}){`
-    + 'ID,Email,FirstName,LastName,'
-    + 'Boards{ID,Name,CreatedBy,CreateDate,Owner},'
+    + 'ID,Email,FirstName,LastName,BoardOrder,'
+    + 'Boards{ID,Name,CreatedBy,CreateDate,Owner,TaskOrder},'
     + 'Issues{ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate}}}';
+
+const updateBoardOrderMutation = (userId: number, boardOrder: Array<number>) => `graphql?query=mutation{
+    updateBoardOrder(UserId:${userId},BoardOrder:"${JSON.stringify(boardOrder)}")
+    {ID,BoardOrder}}`;
+
+const updateTaskOrderMutation = (boardId: number, taskOrder: Array<number>) => `graphql?query=mutation{
+    updateTaskOrder(BoardId:${boardId},TaskOrder:"${JSON.stringify(taskOrder)}")
+    {ID,TaskOrder}}`;
 
 export const getAll = (action$) =>
     action$.ofType(actions.names.GetAllUserInfo$)
@@ -22,6 +30,21 @@ export const getAll = (action$) =>
             .pipe(filterOnProperty('user'))
             .mergeMap((res: any) => concat(
                 of(new AddMultipleBoards(res.Boards)),
-                of(new AddMultipleTasks(res.Issues))
+                of(new AddMultipleTasks(res.Issues)),
+                of(new actions.SaveUserData(res))
             ))
+        );
+
+export const updateBoardOrder = (action$) =>
+        action$.ofType(actions.names.UpdateBoardOrder$)
+            .mergeMap( ({payload}) => http.get(updateBoardOrderMutation(payload.ID, payload.order))
+                .pipe(filterOnProperty('updateBoardOrder'))
+                .map((res: any) => of(new actions.UpdateBoardOrder(res.ID, JSON.parse(res.BoardOrder))))
+        );
+
+export const updateTaskOrder = (action$) =>
+    action$.ofType(actions.names.UpdateTaskOrder$)
+        .mergeMap(({ payload }) => http.get(updateTaskOrderMutation(payload.ID, payload.order))
+            .pipe(filterOnProperty('updateTaskOrder'))
+            .map((res: any) => of(new actions.UpdateTaskOrder(res.ID, JSON.parse(res.TaskOrder))))
         );

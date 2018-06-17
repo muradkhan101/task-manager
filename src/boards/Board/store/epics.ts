@@ -10,7 +10,7 @@ const createBoardMutation = (board: IBoard) => 'graphql?query=mutation{createBoa
     + `CreateDate:${Date.now() / 1000},`
     + `Owner:${board.Owner},`
     + 'ID:-1})'
-    + '{ID,Name,CreatedBy,CreateDate,Owner,Issues}}';
+    + '{ID,Name,CreatedBy,CreateDate,Owner,Issues,TaskOrder}}';
 
 const updateBoardMutations = (board: IBoard, updates) => 'graphql?query=mutation{updateBoard(board:'
     + `{Name:"${updates.NAme || board.Name}",`
@@ -19,7 +19,7 @@ const updateBoardMutations = (board: IBoard, updates) => 'graphql?query=mutation
     + '{ID,Name,CreatedBy,CreateDate,Owner,Issues}}';
 
 const getBoardQuery = (id: number) => `graphql?query={board(id:${id}){`
-    + 'ID,Name,CreatedBy,CreateDate,Owner,Issues{'
+    + 'ID,Name,CreatedBy,CreateDate,Owner,TaskOrder,Issues{'
     + 'ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate}}}';
 
 type AsyncBoardAction = ActionsObservable<actions.BoardAction>;

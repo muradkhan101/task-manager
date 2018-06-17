@@ -5,9 +5,6 @@ import { TextToInput } from './TextToInput';
 import { MAIN_COLORS } from '../../common/css';
 import { ITask, IBoard } from '../common/interfaces';
 
-import { ItemTypes } from '../dragDrop';
-import { DragSourceMonitor, DragSourceConnector, DragSource, DragElementWrapper } from 'react-dnd';
-
 const BoardContainer = styled('div')`
     display: flex;
     flex-direction: column;
@@ -29,39 +26,15 @@ const BottomText = styled('div')`
     color: ${MAIN_COLORS.grassy};
 `;
 
-const taskSource = {
-    beginDrag(props: Props) {
-        return { boardId: props.board.ID, type: ItemTypes.BOARD };
-    },
-    endDrag(props: Props, monitor: DragSourceMonitor, component: Board) {
-        let dropResult = monitor.getDropResult();
-        if (dropResult) {
-            console.log('THIS ITEM', { boardId: props.board.ID });
-            console.log('DROP RESULT', dropResult);
-            // Do dispatch
-        }
-    },
-    isDragging(props: Props, monitor: DragSourceMonitor) {
-        return props.board.ID === monitor.getItem().boardId;
-    }
-};
 
-function collect(connect: DragSourceConnector, monitor: DragSourceMonitor) {
-    return {
-        connectDragSource: connect.dragSource(),
-        isDragging: monitor.isDragging(),
-    };
-}
 
 interface Props {
     board: IBoard;
     createTask: (title: string) => void;
-    connectDragSource?: DragElementWrapper<any>;
 }
 // This component  displays Issues AND adds a Task
 // Could split "text adding" ability into own component
 // Styling applys here too. (BAsically themes in React)
-@DragSource(ItemTypes.BOARD, taskSource, collect)
 export class Board extends Component<Props> {
     state = {
         tempTask: null
@@ -96,12 +69,11 @@ export class Board extends Component<Props> {
     }
     render() {
         const { tempTask } = this.state;
-        const { children, connectDragSource } = this.props;
+        const { children } = this.props;
         const newChildren = React.Children.map(children, (child: React.ReactElement<any>) => {
             return React.cloneElement(child, {boardId: this.props.board.ID});
         });
-        return connectDragSource(
-            <div>
+        return (
                 <BoardContainer>
                     <TasksContainer>
                         {newChildren}
@@ -114,7 +86,6 @@ export class Board extends Component<Props> {
                     </TextToInput>
                     }
                 </BoardContainer>
-            </div>
         );
     }
 }

@@ -8,32 +8,6 @@ import { ALT_COLORS } from '../../common/css';
 import { truncate } from '@app/common';
 import { ITask, TaskStatus } from '../common/interfaces';
 
-import { ItemTypes } from '../dragDrop';
-import { DragSourceMonitor, DragSourceConnector, DragSource, DragElementWrapper } from 'react-dnd';
-const taskSource = {
-    beginDrag(props: Props) {
-        return { taskId: props.ID, boardId: props.Board, type: ItemTypes.TASK };
-    },
-    endDrag(props: Props, monitor: DragSourceMonitor, component: TaskItem) {
-        let dropResult = monitor.getDropResult();
-        if (dropResult) {
-            console.log('THIS ITEM', {ID: props.ID, board: props.Board});
-            console.log('DROP RESULT', dropResult);
-            // Do dispatch
-        }
-    },
-    isDragging(props: Props, monitor: DragSourceMonitor) {
-        return props.ID === monitor.getItem().taskId;
-    }
-};
-
-function collect(connect: DragSourceConnector , monitor: DragSourceMonitor) {
-    return {
-        connectDragSource: connect.dragSource(),
-        isDragging: monitor.isDragging(),
-    };
-}
-
 const Task = styled('div')`
     display: flex;
     justify-content: space-between;
@@ -43,17 +17,16 @@ const Task = styled('div')`
 
 interface Props extends ITask {
     click: (id: number) => any;
-    connectDragSource?: DragElementWrapper<any>;
     isDragging?: boolean;
 }
 // Why are there store files in this directory?
 // Move them out if this will just ba pure a component
 // Leave them if you want to make more compomnents around this
-@DragSource(ItemTypes.TASK, taskSource, collect)
+// @DragSource(ItemTypes.TASK, taskSource, collect)
 export class TaskItem extends PureComponent<Props> {
     render() {
-        const { Name, Description, DueDate, Status, ID, click, connectDragSource } = this.props;
-        return connectDragSource(
+        const { Name, Description, DueDate, Status, ID, click } = this.props;
+        return (
             // This could be a themed component
             // Pass classes and stuff to it
             // Renders them with tree recursion

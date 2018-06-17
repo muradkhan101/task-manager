@@ -7,20 +7,53 @@ import { Dispatch } from 'redux';
 import { AddTask$, UpdateTask$ } from '../Task/store';
 
 import { ItemTypes } from '../dragDrop';
-import { DropTarget, DropTargetConnector, DropTargetMonitor, ConnectDropTarget } from 'react-dnd';
+import {
+    DragSource,
+    DropTarget,
+    DropTargetConnector,
+    DropTargetMonitor,
+    ConnectDropTarget,
+    DragSourceConnector,
+    DragSourceMonitor,
+    DragElementWrapper,
+} from 'react-dnd';
+
+const taskSource = {
+    beginDrag(props: Props) {
+        return { boardId: props.board.ID, type: ItemTypes.BOARD, index: props.index };
+    },
+    endDrag(props: Props, monitor: DragSourceMonitor, component: BoardContainer) {
+        let dropResult = monitor.getDropResult();
+        if (dropResult) {
+            console.log('THIS ITEM', { boardId: props.board.ID });
+            console.log('DROP RESULT', dropResult);
+            // Do dispatch
+        }
+    },
+    isDragging(props: Props, monitor: DragSourceMonitor) {
+        return props.board.ID === monitor.getItem().boardId;
+    }
+};
+
+function collectDrag(connect: DragSourceConnector, monitor: DragSourceMonitor) {
+    return {
+        connectDragSource: connect.dragSource(),
+        isDragging: monitor.isDragging(),
+    };
+}
 
 const taskTarget = {
     drop(props: Props, monitor: DropTargetMonitor, component) {
         // The args for the item being dropped one
         // The return will be passed to the dropEnd
         console.log(monitor.getItem());
-        return { boardId: props.board.ID };
+        return { boardId: props.board.ID, index: props.index };
     },
     canDrop(props: Props, monitor: DropTargetMonitor) {
         let dragItem = monitor.getItem();
         // Lets you differentiate between dragging tasks on the same board
         // and dragging tasks between boards
-        return dragItem.boardId !== props.board.ID;
+        return (dragItem.boardId !== props.board.ID);
     }
 };
 
@@ -35,11 +68,15 @@ interface Props {
     board: IBoard;
     issues: Array<ITask>;
     dispatch: Dispatch<any>;
-    connectDropTarget?: any;
+    index: number;
+    reorderBoards: (oldPos: number, newPost: number) => Array<any>;
+    connectDropTarget?: ConnectDropTarget;
+    connectDragSource?: DragElementWrapper<any>;
 }
 // This will handle create, update, delete, etc
 // Could split echo of those functionalities out into a decorator or something
 // Composeable CRUD
+@DragSource(ItemTypes.BOARD, taskSource, collectDrag)
 @DropTarget([ItemTypes.BOARD, ItemTypes.TASK], taskTarget, collect)
 export class BoardContainer extends React.PureComponent<Props> {
     createTask = (Title) => {
@@ -62,27 +99,40 @@ export class BoardContainer extends React.PureComponent<Props> {
         if (item)
             this.props.dispatch(new UpdateTask$(item, {Status: Number(!item.Status)}));
     }
+    reorderTasks = (oldPos: number, newPos: number) => {
+        let tasks = this.props.issues.filter(task => task.Board === this.props.board.ID);
+        let itemToMove = tasks.splice(oldPos, 1)[0];
+        let newArr = [
+            ...tasks.slice(0, newPos),
+            itemToMove,
+            ...tasks.slice(newPos)
+        ];
+        console.log(newArr);
+        return newArr;
+    }
     render() {
-        // Because functions return thing as value we dont have to worry about its usage mulyple times
-        // If it kept one reference, it would overwrite the old value the next time it was used
-        // like when you pass by reference and mutate
-        // Haskell is basically always pass by value because you have to construct a new item
-        // For each time a value is asked for
-        // Thats  how thunking works there, since values cant be altered once created
-        // dont need to calculate until last second because guarantee of correct operation
-        // JIT compiling could be like this, gives assurance of value when needed
-        const { board, issues, connectDropTarget } = this.props;
-        return connectDropTarget(
-            <div>
+        const { board, issues, connectDropTarget, connectDragSource } = this.props;
+        return connectDragSource(connectDropTarget(
+            <div style={{
+                width: '100%',
+                height: '100%',
+                position: 'relative'
+            }}>
                 <Board board={board} createTask={this.createTask} >
                     {/* Can the filter be removed without passing unnecessary-to-render data (boardID)
                     and doing something like passing a function that renders the data whenn it needs it */}
                     {issues.filter(issue => issue.Board === board.ID)
                         .map((issue, i) =>
-                            <OrderedTaskItem index={i} key={issue.ID} boardId={board.ID} click={this.toggleTaskStatus} task={issue} />)
+                            <OrderedTaskItem
+                                key={issue.ID}
+                                boardId={board.ID}
+                                click={this.toggleTaskStatus}
+                                reorderTasks={this.reorderTasks}
+                                index={i}
+                                task={issue} />)
                     }
                 </Board>
             </div>
-        );
+        ));
     }
 }

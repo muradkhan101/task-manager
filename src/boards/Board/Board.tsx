@@ -1,7 +1,7 @@
-import React, { Component, ReactElement } from 'react';
+import React, { Component } from 'react';
 import styled from 'react-emotion';
 import FaPlus from 'react-icons/lib/fa/plus';
-
+import { TextToInput } from './TextToInput';
 import { MAIN_COLORS } from '../../common/css';
 import { ITask, IBoard } from '../common/interfaces';
 
@@ -13,7 +13,7 @@ const BoardContainer = styled('div')`
     width: 350px;
 `;
 
-const TaskContainer = styled('div')`
+const TasksContainer = styled('div')`
     padding: 12px 8px;
 `;
 
@@ -26,10 +26,7 @@ const BottomText = styled('div')`
     color: ${MAIN_COLORS.grassy};
 `;
 
-const TaskInput = styled('input')`
-    border: none;
-    border: 1px solid ${MAIN_COLORS.grassy};
-`;
+
 
 interface Props {
     board: IBoard;
@@ -61,35 +58,34 @@ export class Board extends Component<Props> {
     updateInternalTask = (e) => {
         this.setState({tempTask: e.target.value});
     }
-    handleKey = ({charCode}) => {
-        if (charCode === 13) {
-            this.props.createTask(this.state.tempTask);
-            this.setState({tempTask: null});
-        }
+    // handleKey = ({charCode}) => {
+    //     if (charCode === 13) {
+    //         this.props.createTask(this.state.tempTask);
+    //         this.setState({tempTask: null});
+    //     }
+    // }
+    submit = (text) => {
+        this.props.createTask(text);
     }
     render() {
         const { tempTask } = this.state;
         const { children } = this.props;
         const newChildren = React.Children.map(children, (child: React.ReactElement<any>) => {
-            return React.cloneElement(child, {boardID: this.props.board.ID});
+            return React.cloneElement(child, {boardId: this.props.board.ID});
         });
         return (
-            <BoardContainer>
-                <TaskContainer>
-                    {newChildren}
-                </TaskContainer>
-                { tempTask === null
-                    // Task adder handles the escape stuff internally
-                    // Leaves this stuff with tempTask for us here
-                    // Terrible name foro variable -> TaskAdder
-                    // Bottom text could be btetter in case of reuse
-                    ? <BottomText onClick={() => this.setState({tempTask: ''})}>
-                        <h3>Create Task</h3>
-                        <FaPlus/>
-                    </BottomText>
-                    : <TaskInput value={tempTask} onKeyPress={this.handleKey} onChange={this.updateInternalTask}/>
-                }
-            </BoardContainer>
+                <BoardContainer>
+                    <TasksContainer>
+                        {newChildren}
+                    </TasksContainer>
+                    {<TextToInput text={''} submit={this.submit} >
+                        {/* <BottomText onClick={() => this.setState({ tempTask: '' })}>
+                            <h3>Create Task</h3>
+                            <FaPlus />
+                        </BottomText> */}
+                    </TextToInput>
+                    }
+                </BoardContainer>
         );
     }
 }

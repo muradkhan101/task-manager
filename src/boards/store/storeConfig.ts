@@ -6,23 +6,37 @@ import { boards, BoardAction } from '@app/board/store';
 import * as boardEpics from '@app/board/store/epics';
 import { tasks, TaskAction } from '@app/task/store';
 import * as taskEpics from '@app/task/store/epics';
-import { getAll } from './epics';
+import * as coreEpics from './epics';
+import { taskOrderReducer, user } from './reducers';
 
 import { IBoard, ITask } from '../common/interfaces';
+import { User } from '@app/common';
 
 // Figure how to fix the any issue and keep the array destructuring
 const combinedEpics = combineEpics(
     ...Object.values(boardEpics) as any,
     ...Object.values(taskEpics) as any,
-    getAll
+    ...Object.values(coreEpics) as any,
 );
 const epicMiddleware = createEpicMiddleware(combinedEpics);
 
 export interface StoreState {
     tasks: Array<ITask>;
     boards: Array<IBoard>;
+    user: User;
 }
-const combinedReducers = combineReducers<StoreState>({ tasks, boards });
+
+function reduceReducers(...args) {
+    return function (state, action) {
+        return args.reduce((stateVal, reducer) => reducer(stateVal, action), state)
+    };
+}
+
+const combinedReducers = combineReducers<StoreState>({
+    tasks,
+    boards: reduceReducers(boards, taskOrderReducer),
+    user
+});
 
 const classToObject = store => next => action => {
     let actionObject = action;

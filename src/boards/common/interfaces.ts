@@ -19,4 +19,5 @@ export interface IBoard {
     Issues: Array<ITask>;
     Name: string;
     Owner: number;
+    TaskOrder: Array<number>;
 }

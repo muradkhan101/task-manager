@@ -4,7 +4,7 @@ import { User } from '@app/common';
 
 type BoardState = Array<IBoard>;
 
-export function user(state: User = {}, action) {
+export function user(state: User = {} as User, action) {
     switch (action.type) {
         case (actions.names.SaveUserData): {
             return action.payload;

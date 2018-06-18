@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
+import { UpdateTaskOrder$ } from '../store/actions';
 import { OrderedTaskItem } from '../Task/OrderedTaskItem';
 import { Dispatch } from 'redux';
 import { AddTask$, UpdateTask$ } from '../Task/store';
@@ -25,9 +26,9 @@ const taskSource = {
     endDrag(props: Props, monitor: DragSourceMonitor, component: BoardContainer) {
         let dropResult = monitor.getDropResult();
         if (dropResult) {
-            console.log('THIS ITEM', { boardId: props.board.ID });
-            console.log('DROP RESULT', dropResult);
-            // Do dispatch
+            let orderedArray = props.reorderBoards(props.index, dropResult.index).map(item => item.ID);
+            console.log(orderedArray);
+            props.updateBoardOrder(orderedArray);
         }
     },
     isDragging(props: Props, monitor: DragSourceMonitor) {
@@ -70,6 +71,7 @@ interface Props {
     dispatch: Dispatch<any>;
     index: number;
     reorderBoards: (oldPos: number, newPost: number) => Array<any>;
+    updateBoardOrder: (order: Array<number>) => void;
     connectDropTarget?: ConnectDropTarget;
     connectDragSource?: DragElementWrapper<any>;
 }
@@ -100,6 +102,7 @@ export class BoardContainer extends React.PureComponent<Props> {
             this.props.dispatch(new UpdateTask$(item, {Status: Number(!item.Status)}));
     }
     reorderTasks = (oldPos: number, newPos: number) => {
+        console.log(oldPos, newPos);
         let tasks = this.props.issues.filter(task => task.Board === this.props.board.ID);
         let itemToMove = tasks.splice(oldPos, 1)[0];
         let newArr = [
@@ -109,6 +112,11 @@ export class BoardContainer extends React.PureComponent<Props> {
         ];
         console.log(newArr);
         return newArr;
+    }
+    dispatchTaskOrder = (order: Array<number>) => {
+        this.props.dispatch(
+            new UpdateTaskOrder$(this.props.board.ID, order)
+        );
     }
     render() {
         const { board, issues, connectDropTarget, connectDragSource } = this.props;
@@ -128,6 +136,7 @@ export class BoardContainer extends React.PureComponent<Props> {
                                 boardId={board.ID}
                                 click={this.toggleTaskStatus}
                                 reorderTasks={this.reorderTasks}
+                                dispatchTaskOrder={this.dispatchTaskOrder}
                                 index={i}
                                 task={issue} />)
                     }

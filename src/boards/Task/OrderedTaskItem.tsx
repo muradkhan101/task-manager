@@ -25,8 +25,8 @@ const taskSource = {
             // Do dispatch
             if (props.boardId === dropResult.boardId) {
                 let newOrder = props.reorderTasks(props.index, dropResult.index).map(item => item.ID);
+                props.dispatchTaskOrder(newOrder);
             }
-            console.log('SAME BOARD', props.boardId === dropResult.boardId);
         }
     },
     isDragging(props: Props, monitor: DragSourceMonitor) {
@@ -66,6 +66,7 @@ interface Props {
     task: ITask;
     click: (id: number) => void;
     reorderTasks: (oldPos: number, newPost: number) => Array<any>;
+    dispatchTaskOrder: (order: Array<number>) => void;
     connectDropTarget?: ConnectDropTarget;
     connectDragSource?: DragElementWrapper<any>;
     draggingOver?: boolean;

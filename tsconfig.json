@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "./dist/",
-        "baseUrl": "./src",
+        "baseUrl": ".",
         "noImplicitAny": false,
         "module": "es2015",
         "target": "es5",
@@ -19,14 +19,15 @@
         "allowSyntheticDefaultImports": true,
         "experimentalDecorators": true,
         "paths": {
-            "@app/common": ["src/common"],
+            "@app/common": ["src/common/index.ts"],
             "@app/common/*": ["src/common/*"],
             "@app/board/*": ["src/boards/Board/*"],
             "@app/task/*": ["src/boards/Task/*"]
         }
     },
     "include": [
-        "src/**/*.ts"
+        "src/**/*.ts",
+        "src/**/*.tsx"
     ],
     "exclude": [
         "src/**/*.spec.ts",

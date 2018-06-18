@@ -1,18 +1,16 @@
 import React from 'react';
 import styled, { css } from 'react-emotion';
-import { MAIN_FONTS } from '@app/common';
+import { MAIN_FONTS, fontTheme } from '@app/common';
 
 const hover = props => css({
-    ':hover': { backgroundColor: props.theme.backgroundColor || '#d0d0d0',}
+    ':hover': { backgroundColor: props.theme.backgroundColor || '#d0d0d0',},
 });
 
 const Wrapper = styled('div')`
     border-radius: 4px;
     width: 100%;
-    font-family: ${props => (props.theme && props.theme.fontFamily) || MAIN_FONTS};
-    font-size: ${props => (props.theme && props.theme.fontSize) || '14px'};
-    font-weight: ${props => (props.theme && props.theme.fontWeight) || '400'};
-    color: ${props => (props.theme && props.theme.color) || '#313131'};
+    color: ${props => props.theme.color || '#313131'};
+    ${fontTheme};
 `;
 
 const textStyles = css`
@@ -29,7 +27,7 @@ const TextDisplay = styled('div')`
 `;
 
 const Input = styled('input')`
-    ${textStyles};
+    ${fontTheme};
     padding: 8px 12px;
     width: 100%;
     border: none;
@@ -41,10 +39,10 @@ const Input = styled('input')`
 
 interface Props {
     text: string;
-    theme?: {
-        fontSize: string;
-        fontFamily: string;
-        color: string;
+    theme: {
+        fontSize?: string;
+        fontFamily?: string;
+        color?: string;
     };
     submit: (text: string) => void;
 }

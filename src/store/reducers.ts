@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import { IBoard, ITask } from '../common/interfaces';
+import { IBoard, ITask } from '../boards/common/interfaces';
 import { User } from '@app/common';
 
 type BoardState = Array<IBoard>;

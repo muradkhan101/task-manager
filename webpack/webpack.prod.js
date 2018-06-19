@@ -40,7 +40,8 @@ module.exports = {
         alias: {
             "@app/common": path.resolve(__dirname, '../src/common/'),
             "@app/board": path.resolve(__dirname, '../src/boards/Board'),
-            "@app/task": path.resolve(__dirname, '../src/boards/Task')
+            "@app/task": path.resolve(__dirname, '../src/boards/Task'),
+            "@app/login": path.resolve(__dirname, '../src/login'),
         }
     },
     optimization: {

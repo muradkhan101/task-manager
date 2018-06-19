@@ -6,8 +6,8 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import styled from 'react-emotion';
 
-import { GetAllUserInfo$, UpdateBoardOrder$ } from './store/actions';
-import { StoreState } from './store/storeConfig';
+import { GetAllUserInfo$, UpdateBoardOrder$ } from '../store/actions';
+import { StoreState } from '../store/storeConfig';
 // import { CreateBoard$, UpdateBoard$ } from '../boards/Board/store';
 // import { AddTask$, UpdateTask$ } from '../boards/Task/store';
 

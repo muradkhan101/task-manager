@@ -1,7 +1,7 @@
 import { ActionsObservable } from 'redux-observable';
 import { http } from '@app/common';
 
-import { IBoard, ITask } from '../common/interfaces';
+import { IBoard, ITask } from '../boards/common/interfaces';
 import * as actions from './actions';
 import { AddMultipleBoards } from '@app/board/store';
 import { AddMultipleTasks } from '@app/task/store';

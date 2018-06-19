@@ -22,7 +22,8 @@
             "@app/common": ["src/common/index.ts"],
             "@app/common/*": ["src/common/*"],
             "@app/board/*": ["src/boards/Board/*"],
-            "@app/task/*": ["src/boards/Task/*"]
+            "@app/task/*": ["src/boards/Task/*"],
+            "@app/login/*": ["src/login/*"]
         }
     },
     "include": [

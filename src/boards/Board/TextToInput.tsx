@@ -1,28 +1,25 @@
 import React from 'react';
 import styled, { css } from 'react-emotion';
-import { MAIN_FONTS, fontTheme } from '@app/common';
+import { MAIN_FONTS, fontTheme, IFontTheme } from '@app/common';
 
 const hover = props => css({
-    ':hover': { backgroundColor: props.theme.backgroundColor || '#d0d0d0',},
+    ':hover': { backgroundColor: props.theme.backgroundColor || '#f6f6f6',},
 });
 
 const Wrapper = styled('div')`
-    border-radius: 4px;
-    width: 100%;
-    color: ${props => props.theme.color || '#313131'};
-    ${fontTheme};
+    margin-top: 8px;
 `;
 
-const textStyles = css`
-    font-size: inherit;
-    font-family: inherit;
-    font-weight: inherit;
-    color: inherit;
-`;
+// const textStyles = css`
+//     font-size: inherit;
+//     font-family: inherit;
+//     font-weight: inherit;
+//     color: inherit;
+// `;
 const TextDisplay = styled('div')`
-    ${textStyles};
+    ${fontTheme};
     ${props => hover(props)};
-    padding: 8px 12px;
+    border-radius: 4px;
     border-top: 1px solid transparent;
 `;
 
@@ -30,6 +27,7 @@ const Input = styled('input')`
     ${fontTheme};
     padding: 8px 12px;
     width: 100%;
+    border-radius: 4px;
     border: none;
     &:focus {
         outline: 2px solid #4286f4;
@@ -39,11 +37,7 @@ const Input = styled('input')`
 
 interface Props {
     text: string;
-    theme: {
-        fontSize?: string;
-        fontFamily?: string;
-        color?: string;
-    };
+    theme: IFontTheme;
     submit: (text: string) => void;
 }
 export class TextToInput extends React.Component<Props> {
@@ -75,21 +69,20 @@ export class TextToInput extends React.Component<Props> {
         }
     }
     updateText = (e) => {
-        this.setState({ text: e.target.value });
+        this.setState({ editText: e.target.value });
     }
     showInput = (event) => {
         this.setState({editing: true});
     }
     render() {
         let { editing, editText } = this.state;
-        let { text } = this.props;
         return (
             <Wrapper>
-                {
-                    !editing
-                        ? <TextDisplay onClick={this.showInput}>{text}</TextDisplay>
-                        : <Input innerRef={this.setRef} value={editText} onChange={this.updateText} onKeyPress={this.handleKey} />
-                }
+            {
+                !editing
+                    ? <TextDisplay theme={this.props.theme} onClick={this.showInput}>{this.props.children}</TextDisplay>
+                    : <Input theme={this.props.theme} innerRef={this.setRef} value={editText} onChange={this.updateText} onKeyPress={this.handleKey} />
+            }
             </Wrapper>
         );
     }

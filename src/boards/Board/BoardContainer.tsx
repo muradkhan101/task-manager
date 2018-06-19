@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
-import { UpdateTaskOrder$ } from '../store/actions';
+import { UpdateTaskOrder$ } from '../../store/actions';
 import { OrderedTaskItem } from '../Task/OrderedTaskItem';
 import { Dispatch } from 'redux';
 import { AddTask$, UpdateTask$ } from '../Task/store';
@@ -27,7 +27,6 @@ const taskSource = {
         let dropResult = monitor.getDropResult();
         if (dropResult) {
             let orderedArray = props.reorderBoards(props.index, dropResult.index).map(item => item.ID);
-            console.log(orderedArray);
             props.updateBoardOrder(orderedArray);
         }
     },
@@ -47,7 +46,6 @@ const taskTarget = {
     drop(props: Props, monitor: DropTargetMonitor, component) {
         // The args for the item being dropped one
         // The return will be passed to the dropEnd
-        console.log(monitor.getItem());
         return { boardId: props.board.ID, index: props.index };
     },
     canDrop(props: Props, monitor: DropTargetMonitor) {
@@ -102,7 +100,6 @@ export class BoardContainer extends React.PureComponent<Props> {
             this.props.dispatch(new UpdateTask$(item, {Status: Number(!item.Status)}));
     }
     reorderTasks = (oldPos: number, newPos: number) => {
-        console.log(oldPos, newPos);
         let tasks = this.props.issues.filter(task => task.Board === this.props.board.ID);
         let itemToMove = tasks.splice(oldPos, 1)[0];
         let newArr = [
@@ -110,7 +107,6 @@ export class BoardContainer extends React.PureComponent<Props> {
             itemToMove,
             ...tasks.slice(newPos)
         ];
-        console.log(newArr);
         return newArr;
     }
     dispatchTaskOrder = (order: Array<number>) => {
@@ -122,7 +118,6 @@ export class BoardContainer extends React.PureComponent<Props> {
         const { board, issues, connectDropTarget, connectDragSource } = this.props;
         return connectDragSource(connectDropTarget(
             <div style={{
-                width: '100%',
                 height: '100%',
                 position: 'relative'
             }}>

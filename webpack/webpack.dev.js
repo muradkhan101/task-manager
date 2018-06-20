@@ -104,7 +104,7 @@ module.exports = {
         stats: "normal",
         port: 3000,
         compress: true,
-        contentBase: path.join(__dirname, "../dist"),
+        contentBase: path.join(__dirname, "../src/static"),
         overlay: true,
     },
     devtool: 'eval-source-map',

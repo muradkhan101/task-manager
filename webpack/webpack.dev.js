@@ -3,6 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyPlugin = require('uglifyjs-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const extractCss = new CssExtractPlugin({
     filename: './dist/assets/app.css'
@@ -63,9 +64,14 @@ module.exports = {
         }
     },
     plugins: [
-        new CleanWebpackPlugin(['dist']),
+        new CleanWebpackPlugin(
+            [path.resolve(__dirname, '../dist')],
+            {
+                root: path.resolve(__dirname, '../'),
+            }
+        ),
         new HtmlWebpackPlugin({
-            template: './src/index.html'
+            template: path.resolve(__dirname, '../src/index.html'),
         }),
         new CssExtractPlugin({
             filename: '[name].[chunkHash].css',
@@ -86,7 +92,13 @@ module.exports = {
                     width: 140,
                 }
             },
-        })
+        }),
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, '../src/static'),
+                to: path.resolve(__dirname, '../dist'),
+            }
+        ]),
     ],
     devServer: {
         stats: "normal",
@@ -98,6 +110,6 @@ module.exports = {
     devtool: 'eval-source-map',
     output: {
         filename: '[name].[hash].js',
-        path: path.resolve(__dirname, '../dist')
+        path: path.resolve(__dirname, '../dist/app')
     }
 }

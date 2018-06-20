@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/react-redux": "^6.0.2",
     "@types/whatwg-fetch": "0.0.33",
+    "copy-webpack-plugin": "^4.5.1",
     "core-js": "^2.5.7",
     "emotion": "^9.1.0",
     "npm": "^5.8.0",

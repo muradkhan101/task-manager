@@ -30,7 +30,7 @@ const Input = styled('input')`
     border-radius: 4px;
     border: none;
     &:focus {
-        outline: 2px solid #4286f4;
+        outline: 2px solid rgba(45, 120, 240, 0.5);
         box-shadow: 0px 1px 1px rgba(50,50,50,0.2);
     }
 `;

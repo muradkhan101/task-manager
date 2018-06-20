@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
-import { UpdateTaskOrder$ } from '../../store/actions';
+import { UpdateTaskOrder$ } from '../store/actions';
 import { OrderedTaskItem } from '../Task/OrderedTaskItem';
 import { Dispatch } from 'redux';
 import { AddTask$, UpdateTask$ } from '../Task/store';

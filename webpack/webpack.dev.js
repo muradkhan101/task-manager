@@ -106,6 +106,7 @@ module.exports = {
         compress: true,
         contentBase: path.join(__dirname, "../src/static"),
         overlay: true,
+        publicPath: '/app',
     },
     devtool: 'eval-source-map',
     output: {

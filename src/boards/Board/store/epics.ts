@@ -7,10 +7,11 @@ import { IBoard } from '../../common/interfaces';
 const createBoardMutation = (board: IBoard) => 'graphql?query=mutation{createBoard(board:'
     + `{Name:"${board.Name}",`
     + `CreatedBy:${board.CreatedBy},`
-    + `CreateDate:${Date.now() / 1000},`
+    + `CreateDate:"${board.CreateDate}",`
     + `Owner:${board.Owner},`
     + 'ID:-1})'
-    + '{ID,Name,CreatedBy,CreateDate,Owner,Issues,TaskOrder}}';
+    + '{ID,Name,CreatedBy,CreateDate,Owner,TaskOrder,Issues{'
+    + 'ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate}}}';
 
 const updateBoardMutations = (board: IBoard, updates) => 'graphql?query=mutation{updateBoard(board:'
     + `{Name:"${updates.NAme || board.Name}",`

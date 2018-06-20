@@ -58,7 +58,7 @@ loginForm.addEventListener('submit', function(e) {
                 return;
             }
             saveUserObject(res);
-            window.location.href = '';
+            window.location.href = '/app/index.html';
         })
 });
 
@@ -89,7 +89,7 @@ registrationForm.addEventListener('submit', function(e) {
             }
             Object.entries( ([key, val]) => registerObject[key] = val);
             saveUserObject(registerObject);
-            window.location.href = '';
+            window.location.href = '/app/index.html';
         });
 })
 

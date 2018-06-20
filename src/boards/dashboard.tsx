@@ -6,26 +6,16 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import styled from 'react-emotion';
 
-import { GetAllUserInfo$, UpdateBoardOrder$ } from '../store/actions';
-import { StoreState } from '../store/storeConfig';
-// import { CreateBoard$, UpdateBoard$ } from '../boards/Board/store';
-// import { AddTask$, UpdateTask$ } from '../boards/Task/store';
+import { GetAllUserInfo$, UpdateBoardOrder$,  } from './store/actions';
+import { StoreState } from './store/storeConfig';
+import { CreateBoard$ } from './Board/store/actions';
+import { TextToInput } from './Board/TextToInput';
 
 import { BoardContainer } from '@app/board/BoardContainer';
 import { ITask, IBoard } from './common/interfaces';
 import { User } from '../common/helpers';
 
-// interface Dispatches {
-//     loadInfo: (id: number) => Dispatch<GetAllUserInfo$>; // think about better spot to put state interface
-//     taskDispatch: {
-//         newTask: (task: ITask) => Dispatch<AddTask$>;
-//         updateTask: (task: ITask, updates: any) => Dispatch<UpdateTask$>;
-//     };
-//     boardDispatch: {
-//         newBoard: (board: IBoard) => Dispatch<CreateBoard$>;
-//         updateTask: (board: ITask, updates: any) => Dispatch<UpdateBoard$>;
-//     };
-// }
+import { StorageHelper } from '@app/common';
 
 const Boards = styled('div')`
     display: flex;
@@ -40,7 +30,7 @@ interface Props {
 @DragDropContext(HTML5Backend)
 export class DashboardContainerComponent extends React.Component<Props> {
     state = {
-        user: { ID: 1 }
+        user: StorageHelper.get('user'),
     };
     componentWillMount() {
         // Need to split into two API calls
@@ -48,8 +38,17 @@ export class DashboardContainerComponent extends React.Component<Props> {
         // Dispatch action to get everything
         // Need to make user object (login / registering) to save date for get all
     }
-    createTask = (title: string) => {
-
+    createBoard = (title: string) => {
+        let board: IBoard = {
+            ID: -1,
+            CreateDate: new Date().toISOString(),
+            CreatedBy: this.state.user.ID,
+            Issues: [],
+            Name: title,
+            Owner: this.state.user.ID,
+            TaskOrder: [],
+        }
+        this.props.dispatch(new CreateBoard$(board));
     }
     reorderBoards = (oldPos: number, newPos: number) => {
         // let tasks = this.props.issues.filter(task => task.Board === this.props.board.ID);
@@ -84,23 +83,29 @@ export class DashboardContainerComponent extends React.Component<Props> {
         return (
             <Boards>
                 {orderedBoardArray.map((board, i) => {
-                    let issues = tasks.filter(task => task.Board === board.ID);
-                    let orderedTaskArray = Array.isArray(board.TaskOrder)
-                        ? board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j)
-                        : issues;
-                    orderedTaskArray = orderedTaskArray.concat(
-                        issues.filter(issue => !issues.map(iss => iss.ID).includes(issue.ID))
-                    );
-                    return <BoardContainer
-                        dispatch={dispatch}
-                        board={board}
-                        issues={orderedTaskArray}
-                        index={i}
-                        reorderBoards={this.reorderBoards}
-                        updateBoardOrder={this.updateBoardOrder}
-                        key={board.ID} />;
+                let issues = tasks.filter(task => task.Board === board.ID);
+                let orderedTaskArray = Array.isArray(board.TaskOrder)
+                    ? board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j)
+                    : issues;
+                orderedTaskArray = orderedTaskArray.concat(
+                    issues.filter(issue => !issues.map(iss => iss.ID).includes(issue.ID))
+                );
+                return <BoardContainer
+                    dispatch={dispatch}
+                    board={board}
+                    issues={orderedTaskArray}
+                    index={i}
+                    reorderBoards={this.reorderBoards}
+                    updateBoardOrder={this.updateBoardOrder}
+                    key={board.ID} />;
                 })
             }
+            <TextToInput theme={{
+                fontSize: 'lg',
+                fontWeight: 'bold'
+            }} submit={this.createBoard} text={''}>
+                Create a board
+            </TextToInput>
             </Boards>
         );
     }

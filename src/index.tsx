@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { configureStore } from './store/storeConfig';
+import { configureStore } from './boards/store/storeConfig';
 
 import { DashboardContainer } from './boards/dashboard';
 import './index.scss';

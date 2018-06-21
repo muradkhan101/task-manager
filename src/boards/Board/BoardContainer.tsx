@@ -27,7 +27,6 @@ const taskSource = {
         let dropResult = monitor.getDropResult();
         if (dropResult) {
             let orderedArray = props.reorderBoards(props.index, dropResult.index).map(item => item.ID);
-            console.log(orderedArray);
             props.updateBoardOrder(orderedArray);
         }
     },
@@ -47,7 +46,6 @@ const taskTarget = {
     drop(props: Props, monitor: DropTargetMonitor, component) {
         // The args for the item being dropped one
         // The return will be passed to the dropEnd
-        console.log(monitor.getItem());
         return { boardId: props.board.ID, index: props.index };
     },
     canDrop(props: Props, monitor: DropTargetMonitor) {
@@ -70,6 +68,7 @@ interface Props {
     issues: Array<ITask>;
     dispatch: Dispatch<any>;
     index: number;
+    userId: number;
     reorderBoards: (oldPos: number, newPost: number) => Array<any>;
     updateBoardOrder: (order: Array<number>) => void;
     connectDropTarget?: ConnectDropTarget;
@@ -89,8 +88,8 @@ export class BoardContainer extends React.PureComponent<Props> {
             Status: 0,
             Board: this.props.board.ID,
             Name: Title,
-            CreatedBy: 1,
-            Owner: 1
+            CreatedBy: this.props.userId,
+            Owner: this.props.userId
         };
         this.props.dispatch(new AddTask$(task));
     }
@@ -102,7 +101,6 @@ export class BoardContainer extends React.PureComponent<Props> {
             this.props.dispatch(new UpdateTask$(item, {Status: Number(!item.Status)}));
     }
     reorderTasks = (oldPos: number, newPos: number) => {
-        console.log(oldPos, newPos);
         let tasks = this.props.issues.filter(task => task.Board === this.props.board.ID);
         let itemToMove = tasks.splice(oldPos, 1)[0];
         let newArr = [
@@ -110,7 +108,6 @@ export class BoardContainer extends React.PureComponent<Props> {
             itemToMove,
             ...tasks.slice(newPos)
         ];
-        console.log(newArr);
         return newArr;
     }
     dispatchTaskOrder = (order: Array<number>) => {
@@ -119,18 +116,29 @@ export class BoardContainer extends React.PureComponent<Props> {
         );
     }
     render() {
+        function findItem<T>(boardList: Array<T>, param: string) {
+            return (ID: number) => boardList.filter(board => board[param] === ID)[0];
+        }
         const { board, issues, connectDropTarget, connectDragSource } = this.props;
+
+        let orderedTaskArray = board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j)
+        orderedTaskArray = orderedTaskArray.concat(
+            issues.filter(issue => !issues.map(iss => iss.ID).includes(issue.ID))
+        );
+
+        // TEMP HACK TO GET AROUND PROPS BOARD ARRAY BEING DIFFERENT FROM RENDERED (causes issues with reordering)
+        issues.splice(0);
+        orderedTaskArray.forEach(item => issues.push(item));
+
         return connectDragSource(connectDropTarget(
             <div style={{
-                width: '100%',
                 height: '100%',
                 position: 'relative'
             }}>
                 <Board board={board} createTask={this.createTask} >
                     {/* Can the filter be removed without passing unnecessary-to-render data (boardID)
                     and doing something like passing a function that renders the data whenn it needs it */}
-                    {issues.filter(issue => issue.Board === board.ID)
-                        .map((issue, i) =>
+                    {orderedTaskArray.map((issue, i) =>
                             <OrderedTaskItem
                                 key={issue.ID}
                                 boardId={board.ID}

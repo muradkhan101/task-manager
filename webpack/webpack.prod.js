@@ -3,6 +3,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyPlugin = require('uglifyjs-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 const extractCss = new CssExtractPlugin({
     filename: path.resolve(__dirname, '../dist/assets/app.css')
 });
@@ -40,7 +42,8 @@ module.exports = {
         alias: {
             "@app/common": path.resolve(__dirname, '../src/common/'),
             "@app/board": path.resolve(__dirname, '../src/boards/Board'),
-            "@app/task": path.resolve(__dirname, '../src/boards/Task')
+            "@app/task": path.resolve(__dirname, '../src/boards/Task'),
+            "@app/login": path.resolve(__dirname, '../src/login'),
         }
     },
     optimization: {
@@ -61,9 +64,14 @@ module.exports = {
         }
     },
     plugins: [
-        new CleanWebpackPlugin(['dist']),
+        new CleanWebpackPlugin(
+            [path.resolve(__dirname, '../dist')],
+            {
+                root: path.resolve(__dirname, '../'),
+            }
+        ),
         new HtmlWebpackPlugin({
-            template: './src/index.html'
+            template: path.resolve(__dirname, '../src/index.html'),
         }),
         new CssExtractPlugin({
             filename: '[name].[chunkHash].css',
@@ -83,10 +91,16 @@ module.exports = {
                     beautify: false,
                 }
             },
-        })
+        }),
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, '../src/static'),
+                to: path.resolve(__dirname, '../dist'),
+            }
+        ]),
     ],
     output: {
         filename: '[name].[chunkHash].js',
-        path: path.resolve(__dirname, '../dist')
+        path: path.resolve(__dirname, '../dist/app')
     }
 }

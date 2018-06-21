@@ -5,25 +5,34 @@ import { TextToInput } from './TextToInput';
 import { MAIN_COLORS } from '../../common/css';
 import { ITask, IBoard } from '../common/interfaces';
 
+const colors = [
+    '#d9e6fc',
+    '#dbffe1',
+    '#fff0ce',
+    '#fcdeec',
+    '#f8ddff',
+    '#dfdbff'
+]
+
 const BoardContainer = styled('div')`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 12px 16px;
+    border-radius: 2px;
+    margin: 12px 16px;
     width: 350px;
+    padding: 12px 8px;
 `;
 
 const TasksContainer = styled('div')`
-    padding: 12px 8px;
 `;
 
 const BottomText = styled('div')`
     display: flex;
     border-top: 1px solid ${MAIN_COLORS.grassy};
     justify-content: space-between;
-    padding: 8px 8px;
-    background: white;
     color: ${MAIN_COLORS.grassy};
+    padding: 8px 0;
 `;
 
 
@@ -32,59 +41,29 @@ interface Props {
     board: IBoard;
     createTask: (title: string) => void;
 }
-// This component  displays Issues AND adds a Task
-// Could split "text adding" ability into own component
-// Styling applys here too. (BAsically themes in React)
 export class Board extends Component<Props> {
-    state = {
-        tempTask: null
-    };
-    // toggleTaskStatus = (id) => {
-        // Should the board know how to update a to-do status?
-        // Or should it be the main page itself that handles that shizz?
-        // Probably whatever is doing the AJAX call for the boards
-        // console.log(id);
-        // let issues = this.state.board.issues.map( issue => {
-        //     if (issue.id === id) {
-        //         issue.status = Number(!issue.status);
-        //     }
-        //     return issue;
-        // });
-        // this.setState({board: Object.assign({issues}, this.state.board, )});
-    // }
-    // After refactor, thils would still just manage internal state
-    // I think that is good sign of code structure
-    // We just take one functionality out and replace it with similar and it still works
-    updateInternalTask = (e) => {
-        this.setState({tempTask: e.target.value});
-    }
-    // handleKey = ({charCode}) => {
-    //     if (charCode === 13) {
-    //         this.props.createTask(this.state.tempTask);
-    //         this.setState({tempTask: null});
-    //     }
-    // }
-    submit = (text) => {
-        this.props.createTask(text);
-    }
     render() {
-        const { tempTask } = this.state;
-        const { children } = this.props;
-        const newChildren = React.Children.map(children, (child: React.ReactElement<any>) => {
-            return React.cloneElement(child, {boardId: this.props.board.ID});
+        const { children, createTask, board } = this.props;
+        const newChildren = React.Children.map(children, (child: React.ReactElement<any>, i) => {
+            return React.cloneElement(child, {
+                boardId: this.props.board.ID,
+                style: {}
+            });
         });
         return (
-                <BoardContainer>
+                <BoardContainer style={{
+                    backgroundColor: colors[ board.ID % (colors.length - 1) ]
+                    }}>
+                    <h2 style={{marginBottom: '8px'}}>{board.Name}</h2>
                     <TasksContainer>
                         {newChildren}
                     </TasksContainer>
-                    {<TextToInput text={''} submit={this.submit} >
-                        {/* <BottomText onClick={() => this.setState({ tempTask: '' })}>
-                            <h3>Create Task</h3>
+                    <TextToInput theme={{fontSize:'md', fontWeight: 'regular'}} text={''} submit={createTask} >
+                        <BottomText onClick={() => this.setState({ tempTask: '' })}>
+                            <span>Create Task</span>
                             <FaPlus />
-                        </BottomText> */}
+                        </BottomText>
                     </TextToInput>
-                    }
                 </BoardContainer>
         );
     }

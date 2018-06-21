@@ -12,7 +12,9 @@ export function user(state: User = {} as User, action) {
         case (actions.names.UpdateBoardOrder): {
             return {
                 ...state,
-                BoardOrder: action.payload.order
+                BoardOrder: Array.isArray(action.payload.order)
+                    ? action.payload.order
+                    : JSON.parse(action.payload.order)
             };
         }
     }
@@ -24,7 +26,9 @@ export function taskOrderReducer(state: BoardState = [], action: actions.UpdateO
         case (actions.names.UpdateTaskOrder): {
             return state.map(board => {
                 if (board.ID === action.payload.ID) {
-                    board.TaskOrder = action.payload.order;
+                    board.TaskOrder = Array.isArray(action.payload.order)
+                        ? action.payload.order
+                        : JSON.parse(action.payload.order);
                 }
                 return board;
             });

@@ -68,6 +68,7 @@ interface Props {
     issues: Array<ITask>;
     dispatch: Dispatch<any>;
     index: number;
+    userId: number;
     reorderBoards: (oldPos: number, newPost: number) => Array<any>;
     updateBoardOrder: (order: Array<number>) => void;
     connectDropTarget?: ConnectDropTarget;
@@ -87,8 +88,8 @@ export class BoardContainer extends React.PureComponent<Props> {
             Status: 0,
             Board: this.props.board.ID,
             Name: Title,
-            CreatedBy: 1,
-            Owner: 1
+            CreatedBy: this.props.userId,
+            Owner: this.props.userId
         };
         this.props.dispatch(new AddTask$(task));
     }
@@ -115,7 +116,20 @@ export class BoardContainer extends React.PureComponent<Props> {
         );
     }
     render() {
+        function findItem<T>(boardList: Array<T>, param: string) {
+            return (ID: number) => boardList.filter(board => board[param] === ID)[0];
+        }
         const { board, issues, connectDropTarget, connectDragSource } = this.props;
+
+        let orderedTaskArray = board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j)
+        orderedTaskArray = orderedTaskArray.concat(
+            issues.filter(issue => !issues.map(iss => iss.ID).includes(issue.ID))
+        );
+
+        // TEMP HACK TO GET AROUND PROPS BOARD ARRAY BEING DIFFERENT FROM RENDERED (causes issues with reordering)
+        issues.splice(0);
+        orderedTaskArray.forEach(item => issues.push(item));
+
         return connectDragSource(connectDropTarget(
             <div style={{
                 height: '100%',
@@ -124,8 +138,7 @@ export class BoardContainer extends React.PureComponent<Props> {
                 <Board board={board} createTask={this.createTask} >
                     {/* Can the filter be removed without passing unnecessary-to-render data (boardID)
                     and doing something like passing a function that renders the data whenn it needs it */}
-                    {issues.filter(issue => issue.Board === board.ID)
-                        .map((issue, i) =>
+                    {orderedTaskArray.map((issue, i) =>
                             <OrderedTaskItem
                                 key={issue.ID}
                                 boardId={board.ID}

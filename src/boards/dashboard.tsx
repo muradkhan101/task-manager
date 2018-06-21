@@ -84,17 +84,12 @@ export class DashboardContainerComponent extends React.Component<Props> {
             <Boards>
                 {orderedBoardArray.map((board, i) => {
                 let issues = tasks.filter(task => task.Board === board.ID);
-                let orderedTaskArray = Array.isArray(board.TaskOrder)
-                    ? board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j)
-                    : issues;
-                orderedTaskArray = orderedTaskArray.concat(
-                    issues.filter(issue => !issues.map(iss => iss.ID).includes(issue.ID))
-                );
                 return <BoardContainer
                     dispatch={dispatch}
                     board={board}
-                    issues={orderedTaskArray}
+                    issues={issues}
                     index={i}
+                    userId={this.state.user.ID}
                     reorderBoards={this.reorderBoards}
                     updateBoardOrder={this.updateBoardOrder}
                     key={board.ID} />;

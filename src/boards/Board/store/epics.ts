@@ -3,6 +3,7 @@ import * as actions from './actions';
 import { http } from '../../../common/helpers';
 import 'rxjs/add/operator/mergeMap';
 import { IBoard } from '../../common/interfaces';
+import { filterOnProperty } from '@app/common';
 
 const createBoardMutation = (board: IBoard) => 'graphql?query=mutation{createBoard(board:'
     + `{Name:"${board.Name}",`
@@ -28,17 +29,20 @@ type AsyncBoardAction = ActionsObservable<actions.BoardAction>;
 export const addBoard = (action$: AsyncBoardAction) =>
     action$.ofType(actions.names.CreateBoard$)
         .mergeMap( action => http.get<IBoard>(createBoardMutation(action.payload.board))
-            .map(res => new actions.CreateBoard(res))
+            .pipe(filterOnProperty('createBoard'))
+            .map((res: any) => new actions.CreateBoard(res))
         );
 
 export const renameBoard = (action$: AsyncBoardAction) =>
     action$.ofType(actions.names.UpdateBoard$)
         .mergeMap( action => http.get<IBoard>(updateBoardMutations(action.payload.board, action.payload.updates))
+            .pipe(filterOnProperty('updateBoard'))
             .map(res => new actions.UpdateBoard(res, action.payload.updates))
     );
 
 export const getBoard = (action$) =>
     action$.ofType(actions.names.GetBoard$)
         .mergeMap( action => http.get<IBoard>(getBoardQuery(action.payload.id))
+            .pipe(filterOnProperty('board'))
             .map(res => new actions.CreateBoard(res))
     );

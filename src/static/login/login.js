@@ -4,6 +4,11 @@ let signupButton = document.getElementById('link--register');
 let errorBox = document.getElementById('error-message');
 
 const baseUrl = 'http://34.219.246.138/';
+const redirectUrl = '/app/index.html';
+
+if (localStorage.getItem('helper|user')) {
+    window.location.href = redirectUrl;
+}
 
 function addErrorMessage(msgs) {
     errorBox.classList.remove('display--none');
@@ -58,7 +63,7 @@ loginForm.addEventListener('submit', function(e) {
                 return;
             }
             saveUserObject(res);
-            window.location.href = '/app/index.html';
+            window.location.href = redirectUrl;
         })
 });
 
@@ -89,7 +94,7 @@ registrationForm.addEventListener('submit', function(e) {
             }
             Object.entries( ([key, val]) => registerObject[key] = val);
             saveUserObject(registerObject);
-            window.location.href = '/app/index.html';
+            window.location.href = redirectUrl;
         });
 })
 

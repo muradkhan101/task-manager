@@ -6,6 +6,9 @@ type BoardState = Array<IBoard>;
 export function boards(state: BoardState = [], action: actions.BoardAction) {
     switch (action.type) {
         case (actions.names.CreateBoard): {
+            action.payload.board.TaskOrder = Array.isArray(action.payload.board.TaskOrder)
+                ? action.payload.board.TaskOrder
+                : JSON.parse(action.payload.board.TaskOrder as any);
             return [ ...state, action.payload.board ];
         }
         case (actions.names.RemoveBoard): {
@@ -19,7 +22,12 @@ export function boards(state: BoardState = [], action: actions.BoardAction) {
             });
         }
         case (actions.names.AddMultipleBoards): {
-            return [ ...state, ...action.payload.boards ];
+            return [ ...state, ...action.payload.boards.map(board => {
+                board.TaskOrder = Array.isArray(board.TaskOrder)
+                    ? board.TaskOrder
+                    : JSON.parse(board.TaskOrder as any);
+                return board;
+            }) ];
         }
     }
     return state;

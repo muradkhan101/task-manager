@@ -15,15 +15,16 @@ import { BoardContainer } from '@app/board/BoardContainer';
 import { ITask, IBoard } from './common/interfaces';
 import { User } from '../common/helpers';
 
-import { StorageHelper } from '@app/common';
+import { StorageHelper, Theme } from '@app/common';
 
 const Boards = styled('div')`
     display: flex;
-`
+`;
 
 interface Props {
     tasks: Array<ITask>;
     boards: Array<IBoard>;
+    theme: Theme;
     user: User;
     dispatch: Dispatch<any>;
 }
@@ -47,7 +48,7 @@ export class DashboardContainerComponent extends React.Component<Props> {
             Name: title,
             Owner: this.state.user.ID,
             TaskOrder: [],
-        }
+        };
         this.props.dispatch(new CreateBoard$(board));
     }
     reorderBoards = (oldPos: number, newPos: number) => {
@@ -58,12 +59,9 @@ export class DashboardContainerComponent extends React.Component<Props> {
             ...boards.slice(0, newPos),
             itemToMove,
             ...boards.slice(newPos)
-        ];
-        return newArr;
-    }
-    updateBoardOrder = (order: Array<number>) => {
+        ].map(item => item.ID);
         this.props.dispatch(
-            new UpdateBoardOrder$(this.props.user.ID, order)
+            new UpdateBoardOrder$(this.props.user.ID, newArr)
         );
     }
     render() {
@@ -85,13 +83,9 @@ export class DashboardContainerComponent extends React.Component<Props> {
                 {orderedBoardArray.map((board, i) => {
                 let issues = tasks.filter(task => task.Board === board.ID);
                 return <BoardContainer
-                    dispatch={dispatch}
                     board={board}
-                    issues={issues}
                     index={i}
-                    userId={this.state.user.ID}
                     reorderBoards={this.reorderBoards}
-                    updateBoardOrder={this.updateBoardOrder}
                     key={board.ID} />;
                 })
             }
@@ -109,7 +103,8 @@ export class DashboardContainerComponent extends React.Component<Props> {
 const mapStateToProps = (state: StoreState) => ({
     tasks: state.tasks,
     boards: state.boards,
-    user: state.user
+    user: state.user,
+    theme: state.user.theme,
 });
 
 // const mapDispatchToProps = (dispatch) => ({

@@ -9,7 +9,7 @@ import * as taskEpics from '@app/task/store/epics';
 import * as coreEpics from './epics';
 import { taskOrderReducer, user } from './reducers';
 
-import { IBoard, ITask } from '../common/interfaces';
+import { IBoard, ITask, Theme } from '../common/interfaces';
 import { User } from '@app/common';
 
 // Figure how to fix the any issue and keep the array destructuring
@@ -24,6 +24,7 @@ export interface StoreState {
     tasks: Array<ITask>;
     boards: Array<IBoard>;
     user: User;
+    theme: Theme;
 }
 
 function reduceReducers(...args) {
@@ -44,7 +45,7 @@ const classToObject = store => next => action => {
          actionObject = { ...action };
     }
     return next(actionObject);
-}
+};
 
 export function configureStore() {
     const store = createStore<StoreState>(
@@ -52,4 +53,4 @@ export function configureStore() {
         applyMiddleware(classToObject, epicMiddleware),
     );
     return store;
-};
+}

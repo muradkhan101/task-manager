@@ -4,7 +4,7 @@ import { User } from '@app/common';
 
 type BoardState = Array<IBoard>;
 
-export function user(state: User = {} as User, action) {
+export function user(state: User = {theme: 'light'} as User, action) {
     switch (action.type) {
         case (actions.names.SaveUserData): {
             return action.payload;
@@ -15,6 +15,12 @@ export function user(state: User = {} as User, action) {
                 BoardOrder: Array.isArray(action.payload.order)
                     ? action.payload.order
                     : JSON.parse(action.payload.order)
+            };
+        }
+        case (actions.names.UpdateTheme): {
+            return {
+                ...state,
+                theme: action.payload.theme
             };
         }
     }

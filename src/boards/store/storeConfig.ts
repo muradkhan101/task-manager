@@ -9,8 +9,8 @@ import * as taskEpics from '@app/task/store/epics';
 import * as coreEpics from './epics';
 import { taskOrderReducer, user } from './reducers';
 
-import { IBoard, ITask, Theme } from '../common/interfaces';
-import { User } from '@app/common';
+import { IBoard, ITask } from '../common/interfaces';
+import { User, Theme } from '@app/common';
 
 // Figure how to fix the any issue and keep the array destructuring
 const combinedEpics = combineEpics(

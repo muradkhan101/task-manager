@@ -5,14 +5,24 @@ import { TextToInput } from './TextToInput';
 import { MAIN_COLORS } from '../../common/css';
 import { ITask, IBoard } from '../common/interfaces';
 
-const colors = [
-    '#d9e6fc',
-    '#dbffe1',
-    '#fff0ce',
-    '#fcdeec',
-    '#f8ddff',
-    '#dfdbff'
-]
+const colors = {
+    light: [
+        '#d9e6fc',
+        '#dbffe1',
+        '#fff0ce',
+        '#fcdeec',
+        '#f8ddff',
+        '#dfdbff',
+    ],
+    dark: [
+        '#1c68ea',
+        '#23c43e',
+        '#e8ab1e',
+        '#dd2c7f',
+        '#ae2dce',
+        '#4230d1',
+    ]
+};
 
 const BoardContainer = styled('div')`
     display: flex;
@@ -39,11 +49,12 @@ const BottomText = styled('div')`
 
 interface Props {
     board: IBoard;
+    theme: 'light' | 'dark';
     createTask: (title: string) => void;
 }
 export class Board extends Component<Props> {
     render() {
-        const { children, createTask, board } = this.props;
+        const { children, createTask, board, theme } = this.props;
         const newChildren = React.Children.map(children, (child: React.ReactElement<any>, i) => {
             return React.cloneElement(child, {
                 boardId: this.props.board.ID,
@@ -52,13 +63,13 @@ export class Board extends Component<Props> {
         });
         return (
                 <BoardContainer style={{
-                    backgroundColor: colors[ board.ID % (colors.length - 1) ]
+                    backgroundColor: colors[theme][ board.ID % (colors[theme].length - 1) ]
                     }}>
                     <h2 style={{marginBottom: '8px'}}>{board.Name}</h2>
                     <TasksContainer>
                         {newChildren}
                     </TasksContainer>
-                    <TextToInput theme={{fontSize:'md', fontWeight: 'regular'}} text={''} submit={createTask} >
+                    <TextToInput theme={{fontSize: 'md', fontWeight: 'regular'}} text={''} submit={createTask} >
                         <BottomText onClick={() => this.setState({ tempTask: '' })}>
                             <span>Create Task</span>
                             <FaPlus />

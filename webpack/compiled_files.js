@@ -32,8 +32,8 @@ class CompiledFileList {
                 // compilation.hooks.additionalAssets.tapAsync(name, (cbInner) => {
                  
                 // })
-            let info = JSON.stringify({ files: this.assets.filter(item => /(js|css)$/.test(item)) });
-            compilation.assets['../listOfFiles.json'] = {
+            let info = 'let itemList = ' + JSON.stringify(this.assets.filter(item => /(js|css)$/.test(item)).map(item => '/app/' + item) );
+            compilation.assets['../listOfFiles.js'] = {
                 source: () => info,
                 size: () => info.length,
             }

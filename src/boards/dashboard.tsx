@@ -45,12 +45,13 @@ export class DashboardContainerComponent extends React.Component<Props> {
 
         let { boards, user } = nextProps;
 
-        let orderedBoardArray = Array.isArray(user.BoardOrder)
+        let orderedBoards = Array.isArray(user.BoardOrder)
             ? user.BoardOrder.map(findItem<IBoard>(boards, 'ID')).filter(i => i)
-            : boards;
-        orderedBoardArray = orderedBoardArray.concat(
-            boards.filter(board => !boards.map(brd => brd.ID).includes(board.ID))
+            : [];
+        orderedBoards = orderedBoards.concat(
+            boards.filter(board => !orderedBoards.map(brd => brd.ID).includes(board.ID))
         );
+        this.setState({orderedBoards});
     }
     createBoard = (title: string) => {
         let board: IBoard = {
@@ -66,7 +67,7 @@ export class DashboardContainerComponent extends React.Component<Props> {
     }
     reorderBoards = (oldPos: number, newPos: number) => {
         // let tasks = this.props.issues.filter(task => task.Board === this.props.board.ID);
-        const boards = this.props.boards.slice();
+        const boards = this.state.orderedBoards.slice();
         let itemToMove = boards.splice(oldPos, 1)[0];
         let newArr = [
             ...boards.slice(0, newPos),
@@ -79,12 +80,10 @@ export class DashboardContainerComponent extends React.Component<Props> {
         );
     }
     render() {
-        let { tasks } = this.props;
         let { orderedBoards } = this.state;
         return (
             <Boards>
                 {orderedBoards.map((board, i) => {
-                let issues = tasks.filter(task => task.Board === board.ID);
                 return <BoardContainer
                     board={board}
                     index={i}
@@ -104,7 +103,7 @@ export class DashboardContainerComponent extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: StoreState) => ({
-    tasks: (console.log('[DASHBAORD]', state), state.tasks),
+    tasks: state.tasks,
     boards: state.boards,
     user: state.user,
     theme: state.user.theme,

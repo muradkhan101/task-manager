@@ -7,7 +7,7 @@ type BoardState = Array<IBoard>;
 export function user(state: User = {theme: 'light'} as User, action) {
     switch (action.type) {
         case (actions.names.SaveUserData): {
-            return action.payload;
+            return { ...state, ...action.payload };
         }
         case (actions.names.UpdateBoardOrder): {
             return {

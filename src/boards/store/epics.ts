@@ -1,13 +1,11 @@
-import { ActionsObservable } from 'redux-observable';
 import { http, Theme } from '@app/common';
 
-import { IBoard, ITask } from '../common/interfaces';
 import * as actions from './actions';
 import { AddMultipleBoards } from '@app/board/store';
 import { AddMultipleTasks } from '@app/task/store';
 import { concat } from 'rxjs/observable/concat';
 import { of } from 'rxjs/observable/of';
-import { filterOnProperty } from '@app/common';
+import { filterOnProperty, safeParse } from '@app/common';
 
 const getAllQuery = (userId: number) => `graphql?query={user(id:${userId}){`
     + 'ID,Email,FirstName,LastName,BoardOrder,'
@@ -26,14 +24,6 @@ const updateThemeMutation = (userId: number, newTheme: Theme) => `graphql?query=
     + `updateTheme(UserId:${userId},Theme:${newTheme})`
     + '{ID,Theme}}';
 
-function safeParse(json: string) {
-    try {
-        return JSON.parse(json);
-    } catch (e) {
-        console.error(e);
-        return '';
-    }
-}
 
 export const getAll = (action$) =>
     action$.ofType(actions.names.GetAllUserInfo$)

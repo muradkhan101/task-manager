@@ -1,5 +1,6 @@
 import * as actions from './actions';
 import { IBoard, ITask } from '../../common/interfaces';
+import { safeParse } from '@app/common';
 
 type BoardState = Array<IBoard>;
 
@@ -8,7 +9,7 @@ export function boards(state: BoardState = [], action: actions.BoardAction) {
         case (actions.names.CreateBoard): {
             action.payload.board.TaskOrder = Array.isArray(action.payload.board.TaskOrder)
                 ? action.payload.board.TaskOrder
-                : JSON.parse(action.payload.board.TaskOrder as any);
+                : safeParse(action.payload.board.TaskOrder as any);
             return [ ...state, action.payload.board ];
         }
         case (actions.names.RemoveBoard): {
@@ -25,7 +26,7 @@ export function boards(state: BoardState = [], action: actions.BoardAction) {
             return [ ...state, ...action.payload.boards.map(board => {
                 board.TaskOrder = Array.isArray(board.TaskOrder)
                     ? board.TaskOrder
-                    : JSON.parse(board.TaskOrder as any);
+                    : safeParse(board.TaskOrder as any);
                 return board;
             }) ];
         }

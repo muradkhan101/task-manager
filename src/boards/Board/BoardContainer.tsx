@@ -94,11 +94,11 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
         }
         const { board, issues } = this.props;
 
-        let orderedTaskArray = board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j);
-        orderedTaskArray = orderedTaskArray.concat(
-            issues.filter(issue => !issues.map(iss => iss.ID).includes(issue.ID))
+        let orderedTasks = board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j);
+        orderedTasks = orderedTasks.concat(
+            issues.filter(issue => !orderedTasks.map(iss => iss.ID).includes(issue.ID))
         );
-
+        this.setState({ orderedTasks });
     }
     createTask = (Title) => {
         let task: ITask = {
@@ -121,15 +121,15 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
             this.props.dispatch(new UpdateTask$(item, {Status: Number(!item.Status)}));
     }
     reorderTasks = (oldPos: number, newPos: number) => {
-        let tasks = this.props.issues.filter(task => task.Board === this.props.board.ID);
+        let tasks = this.state.orderedTasks;
         let itemToMove = tasks.splice(oldPos, 1)[0];
-        let newArr = [
+        let orderedTasks = [
             ...tasks.slice(0, newPos),
             itemToMove,
             ...tasks.slice(newPos)
         ];
-        this.setState({orderedTasks: newArr});
-        return newArr;
+        this.setState({orderedTasks});
+        return orderedTasks;
     }
     dispatchTaskOrder = (order: Array<number>) => {
         this.props.dispatch(
@@ -164,7 +164,7 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
 }
 
 const mapStateToProps = (state: StoreState, ownProps: Props) => ({
-   issues: (console.log('[BOARD]', state), state.tasks.filter(task => task.Board === ownProps.board.ID)),
+   issues: state.tasks.filter(task => task.Board === ownProps.board.ID),
    userId: state.user.ID,
    theme: state.user.theme,
    ...ownProps

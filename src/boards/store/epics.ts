@@ -1,13 +1,11 @@
-import { ActionsObservable } from 'redux-observable';
-import { http } from '@app/common';
+import { http, Theme } from '@app/common';
 
-import { IBoard, ITask } from '../common/interfaces';
 import * as actions from './actions';
 import { AddMultipleBoards } from '@app/board/store';
 import { AddMultipleTasks } from '@app/task/store';
 import { concat } from 'rxjs/observable/concat';
 import { of } from 'rxjs/observable/of';
-import { filterOnProperty } from '@app/common';
+import { filterOnProperty, safeParse } from '@app/common';
 
 const getAllQuery = (userId: number) => `graphql?query={user(id:${userId}){`
     + 'ID,Email,FirstName,LastName,BoardOrder,'
@@ -22,14 +20,10 @@ const updateTaskOrderMutation = (boardId: number, taskOrder: Array<number>) => `
     + `updateTaskOrder(BoardId:${boardId},TaskOrder:"${JSON.stringify(taskOrder)}")`
     + `{ID,TaskOrder}}`;
 
-function safeParse(json: string) {
-    try {
-        return JSON.parse(json);
-    } catch (e) {
-        console.error(e);
-        return '';
-    }
-}
+const updateThemeMutation = (userId: number, newTheme: Theme) => `graphql?query=mutation{`
+    + `updateTheme(UserId:${userId},Theme:${newTheme})`
+    + '{ID,Theme}}';
+
 
 export const getAll = (action$) =>
     action$.ofType(actions.names.GetAllUserInfo$)
@@ -60,3 +54,10 @@ export const updateTaskOrder = (action$) =>
             .pipe(filterOnProperty('updateTaskOrder'))
             .map((res: any) => new actions.UpdateTaskOrder(res.ID, safeParse(res.TaskOrder)))
         );
+
+export const updateTheme = (action$) =>
+        action$.ofType(actions.names.UpdateTheme$)
+            .mergeMap(({ payload }) => http.get(updateThemeMutation(payload.ID, payload.theme))
+                .pipe(filterOnProperty('updateTheme'))
+                .map((res: any) => new actions.UpdateTheme(res.ID, res.Theme))
+            );

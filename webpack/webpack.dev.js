@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyPlugin = require('uglifyjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const FilesPlugin = require('./compiled_files');
 
 const extractCss = new CssExtractPlugin({
     filename: './dist/assets/app.css'
@@ -99,6 +100,7 @@ module.exports = {
                 to: path.resolve(__dirname, '../dist'),
             }
         ]),
+        new FilesPlugin(),
     ],
     devServer: {
         stats: "normal",

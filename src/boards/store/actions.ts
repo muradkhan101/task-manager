@@ -1,12 +1,14 @@
-import { Action, User } from '@app/common';
+import { Action, User, Theme } from '@app/common';
 
 export const names = {
     SaveUserData: 'SAVE_USER_DATA',
     UpdateBoardOrder: 'UPDATE_BOARD_ORDER',
     UpdateTaskOrder: 'UPDATE_TASK_ORDER',
+    UpdateTheme: 'UPDATE_THEME',
     GetAllUserInfo$: 'GET_ALL_USER_INFO$',
     UpdateBoardOrder$: 'UPDATE_BOARD_ORDER$',
     UpdateTaskOrder$: 'UPDATE_TASK_ORDER$',
+    UpdateTheme$: 'UPDATE_THEME$',
 };
 
 export interface UpdateOrderAction extends Action {
@@ -52,4 +54,16 @@ export class UpdateBoardOrder$ extends UpdateBoardOrder {
 
 export class UpdateTaskOrder$ extends UpdateBoardOrder {
     type = names.UpdateTaskOrder$;
+}
+
+export class UpdateTheme implements Action {
+    type = names.UpdateTheme;
+    payload: { ID: number, theme: Theme };
+    constructor(ID: number, theme: Theme) {
+        this.payload = { ID, theme };
+    }
+}
+
+export class UpdateTheme$ extends UpdateTheme {
+    type = names.UpdateTheme$;
 }

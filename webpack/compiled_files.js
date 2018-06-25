@@ -25,7 +25,7 @@ class CompiledFileList {
             }
         )
         compiler.hooks.done.tap(name, (stats) => {
-            console.log('DONE!!!!!!!', this.assets.filter(item => item.includes('')));
+            this.assets.filter(item => /\.(js|css)$/.test(item));
         })
         // Doesnt emit after this for some reason
         compiler.hooks.emit.tapAsync(name, (compilation, cb) => {

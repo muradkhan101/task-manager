@@ -15,19 +15,7 @@ import {
 
 const taskSource = {
     beginDrag(props: Props) {
-        return { taskId: props.task.ID, boardId: props.boardId, type: ItemTypes.TASK };
-    },
-    endDrag(props: Props, monitor: DragSourceMonitor, component: OrderedTaskItem) {
-        let dropResult = monitor.getDropResult();
-        if (dropResult) {
-            // console.log('THIS ITEM', { ID: props.task.ID, board: props.boardId, index: props.index });
-            // console.log('DROP RESULT', dropResult);
-            // Do dispatch
-            if (props.boardId === dropResult.boardId) {
-                let newOrder = props.reorderTasks(props.index, dropResult.index).map(item => item.ID);
-                props.dispatchTaskOrder(newOrder);
-            }
-        }
+        return { taskId: props.task.ID, boardId: props.boardId, type: ItemTypes.TASK, index: props.index };
     },
     isDragging(props: Props, monitor: DragSourceMonitor) {
         return props.task.ID === monitor.getItem().taskId;
@@ -43,9 +31,11 @@ function collectDrag(connect: DragSourceConnector, monitor: DragSourceMonitor) {
 
 const taskTarget = {
     drop(props: Props, monitor: DropTargetMonitor, component) {
-        // The args for the item being dropped one
-        // The return will be passed to the dropEnd
-        return { taskId: props.task.ID, boardId: props.boardId, index: props.index };
+        let dragItem = monitor.getItem();
+        if (props.boardId === dragItem.boardId) {
+            let newOrder = props.reorderTasks(dragItem.index, props.index).map(item => item.ID);
+            props.dispatchTaskOrder(newOrder);
+        }
     },
     canDrop(props: Props, monitor: DropTargetMonitor) {
         let dragItem = monitor.getItem();

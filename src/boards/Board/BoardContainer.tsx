@@ -145,8 +145,6 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
                 position: 'relative'
             }}>
                 <Board board={board} createTask={this.createTask} theme={theme}>
-                    {/* Can the filter be removed without passing unnecessary-to-render data (boardID)
-                    and doing something like passing a function that renders the data whenn it needs it */}
                     {orderedTasks.map((issue, i) =>
                             <OrderedTaskItem
                                 key={issue.ID}

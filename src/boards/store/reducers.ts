@@ -42,3 +42,25 @@ export function taskOrderReducer(state: BoardState = [], action: actions.UpdateO
     }
     return state;
 }
+
+export function drag(state, action) {
+    switch (action.type) {
+        case (actions.names.StartDragTask): {
+            return {
+                type: 'task',
+                task: action.payload.task,
+                boardId: action.payload.boardId,
+            };
+        }
+        case (actions.names.StartDragBoard): {
+            return {
+                type: 'task',
+                board: action.payload.board,
+            }
+        }
+        case (actions.names.EndDrag): {
+            return {};
+        }
+    }
+    return state;
+}

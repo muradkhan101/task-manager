@@ -7,7 +7,7 @@ import * as boardEpics from '@app/board/store/epics';
 import { tasks, TaskAction } from '@app/task/store';
 import * as taskEpics from '@app/task/store/epics';
 import * as coreEpics from './epics';
-import { taskOrderReducer, user } from './reducers';
+import { taskOrderReducer, user, drag } from './reducers';
 
 import { IBoard, ITask } from '../common/interfaces';
 import { User, Theme } from '@app/common';
@@ -36,7 +36,8 @@ function reduceReducers(...args) {
 const combinedReducers = combineReducers<StoreState>({
     tasks,
     boards: reduceReducers(boards, taskOrderReducer),
-    user
+    user,
+    drag,
 });
 
 const classToObject = store => next => action => {

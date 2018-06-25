@@ -1,4 +1,4 @@
-import { IBoard } from '../../common/interfaces';
+import { IBoard, ITask } from '../../common/interfaces';
 import { Action } from '../../../common/helpers';
 
 export interface BoardPayload {
@@ -60,7 +60,6 @@ export class AddMultipleBoards implements BoardAction {
         this.payload = { boards };
     }
 }
-
 export class CreateBoard$ extends CreateBoard {
     type = names.CreateBoard$;
 }

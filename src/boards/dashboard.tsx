@@ -26,18 +26,31 @@ interface Props {
     boards: Array<IBoard>;
     theme: Theme;
     user: User;
+    order: Array<number>;
     dispatch: Dispatch<any>;
 }
 @DragDropContext(HTML5Backend)
 export class DashboardContainerComponent extends React.Component<Props> {
     state = {
         user: StorageHelper.get('user'),
+        orderedBoards: [],
     };
     componentWillMount() {
-        // Need to split into two API calls
         this.props.dispatch(new GetAllUserInfo$(this.state.user.ID));
-        // Dispatch action to get everything
-        // Need to make user object (login / registering) to save date for get all
+    }
+    componentWillReceiveProps(nextProps: Readonly<Props>) {
+        function findItem<T>(boardList: Array<T>, param: string) {
+            return (ID: number) => boardList.filter(board => board[param] === ID)[0];
+        }
+
+        let { boards, user } = nextProps;
+
+        let orderedBoardArray = Array.isArray(user.BoardOrder)
+            ? user.BoardOrder.map(findItem<IBoard>(boards, 'ID')).filter(i => i)
+            : boards;
+        orderedBoardArray = orderedBoardArray.concat(
+            boards.filter(board => !boards.map(brd => brd.ID).includes(board.ID))
+        );
     }
     createBoard = (title: string) => {
         let board: IBoard = {
@@ -59,28 +72,18 @@ export class DashboardContainerComponent extends React.Component<Props> {
             ...boards.slice(0, newPos),
             itemToMove,
             ...boards.slice(newPos)
-        ].map(item => item.ID);
+        ];
+        this.setState({boardOrder: newArr});
         this.props.dispatch(
-            new UpdateBoardOrder$(this.props.user.ID, newArr)
+            new UpdateBoardOrder$(this.props.user.ID, newArr.map(item => item.ID))
         );
     }
     render() {
-        function findItem<T>(boardList: Array<T>, param: string) {
-            return (ID: number) => boardList.filter(board => board[param] === ID)[0];
-        }
-        let { boards, tasks, dispatch, user } = this.props;
-        let orderedBoardArray = Array.isArray(user.BoardOrder)
-            ? user.BoardOrder.map(findItem<IBoard>(boards, 'ID')).filter(i => i)
-            : boards;
-        orderedBoardArray = orderedBoardArray.concat(
-            boards.filter(board => !boards.map(brd => brd.ID).includes(board.ID))
-        );
-        // TEMP HACK TO GET AROUND PROPS BOARD ARRAY BEING DIFFERENT FROM RENDERED (causes issues with reordering)
-        this.props.boards.splice(0);
-        orderedBoardArray.forEach(item => this.props.boards.push(item));
+        let { tasks } = this.props;
+        let { orderedBoards } = this.state;
         return (
             <Boards>
-                {orderedBoardArray.map((board, i) => {
+                {orderedBoards.map((board, i) => {
                 let issues = tasks.filter(task => task.Board === board.ID);
                 return <BoardContainer
                     board={board}
@@ -101,10 +104,11 @@ export class DashboardContainerComponent extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: StoreState) => ({
-    tasks: state.tasks,
+    tasks: (console.log('[DASHBAORD]', state), state.tasks),
     boards: state.boards,
     user: state.user,
     theme: state.user.theme,
+    order: state.user.BoardOrder,
 });
 
 // const mapDispatchToProps = (dispatch) => ({

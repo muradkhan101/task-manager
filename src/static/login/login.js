@@ -104,3 +104,7 @@ signupButton.addEventListener('click', function(e) {
     e.preventDefault();
     [loginForm, registrationForm].forEach(item => item.classList.toggle('display--none'))
 })
+
+if (itemList) {
+    console.log(itemList);
+}

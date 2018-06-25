@@ -85,6 +85,21 @@ interface Props {
 @DragSource(ItemTypes.BOARD, taskSource, collectDrag)
 @DropTarget([ItemTypes.BOARD, ItemTypes.TASK], taskTarget, collect)
 class BoardContainerComponent extends React.Component<Props & ReduxProps> {
+    state = {
+        orderedTasks: []
+    };
+    componentWillReceiveProps(nextProps: Readonly<Props & ReduxProps>) {
+        function findItem<T>(boardList: Array<T>, param: string) {
+            return (ID: number) => boardList.filter(board => board[param] === ID)[0];
+        }
+        const { board, issues } = this.props;
+
+        let orderedTaskArray = board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j);
+        orderedTaskArray = orderedTaskArray.concat(
+            issues.filter(issue => !issues.map(iss => iss.ID).includes(issue.ID))
+        );
+
+    }
     createTask = (Title) => {
         let task: ITask = {
             ID: -1,
@@ -113,6 +128,7 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
             itemToMove,
             ...tasks.slice(newPos)
         ];
+        this.setState({orderedTasks: newArr});
         return newArr;
     }
     dispatchTaskOrder = (order: Array<number>) => {
@@ -121,20 +137,8 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
         );
     }
     render() {
-        function findItem<T>(boardList: Array<T>, param: string) {
-            return (ID: number) => boardList.filter(board => board[param] === ID)[0];
-        }
-        const { board, issues, connectDropTarget, connectDragSource, theme } = this.props;
-
-        let orderedTaskArray = board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j);
-        orderedTaskArray = orderedTaskArray.concat(
-            issues.filter(issue => !issues.map(iss => iss.ID).includes(issue.ID))
-        );
-
-        // TEMP HACK TO GET AROUND PROPS BOARD ARRAY BEING DIFFERENT FROM RENDERED (causes issues with reordering)
-        issues.splice(0);
-        orderedTaskArray.forEach(item => issues.push(item));
-
+        const { board, connectDropTarget, connectDragSource, theme } = this.props;
+        const { orderedTasks } = this.state;
         return connectDragSource(connectDropTarget(
             <div style={{
                 height: '100%',
@@ -143,7 +147,7 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
                 <Board board={board} createTask={this.createTask} theme={theme}>
                     {/* Can the filter be removed without passing unnecessary-to-render data (boardID)
                     and doing something like passing a function that renders the data whenn it needs it */}
-                    {orderedTaskArray.map((issue, i) =>
+                    {orderedTasks.map((issue, i) =>
                             <OrderedTaskItem
                                 key={issue.ID}
                                 boardId={board.ID}
@@ -160,7 +164,7 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
 }
 
 const mapStateToProps = (state: StoreState, ownProps: Props) => ({
-   issues: state.tasks.filter(task => task.Board === ownProps.board.ID),
+   issues: (console.log('[BOARD]', state), state.tasks.filter(task => task.Board === ownProps.board.ID)),
    userId: state.user.ID,
    theme: state.user.theme,
    ...ownProps

@@ -15,6 +15,7 @@ import {
 
 const taskSource = {
     beginDrag(props: Props) {
+        props.handleDrag(props.task.ID, 'START');
         return { taskId: props.task.ID, boardId: props.boardId, type: ItemTypes.TASK, index: props.index };
     },
     isDragging(props: Props, monitor: DragSourceMonitor) {
@@ -34,7 +35,7 @@ const taskTarget = {
         let dragItem = monitor.getItem();
         if (props.boardId === dragItem.boardId) {
             let newOrder = props.reorderTasks(dragItem.index, props.index).map(item => item.ID);
-            props.dispatchTaskOrder(newOrder);
+            props.handleDrag(newOrder, 'REORDER');
         }
     },
     canDrop(props: Props, monitor: DropTargetMonitor) {
@@ -56,7 +57,7 @@ interface Props {
     task: ITask;
     click: (id: number) => void;
     reorderTasks: (oldPos: number, newPost: number) => Array<any>;
-    dispatchTaskOrder: (order: Array<number>) => void;
+    handleDrag: (order: Array<number> | number, type: string) => void;
     connectDropTarget?: ConnectDropTarget;
     connectDragSource?: DragElementWrapper<any>;
     draggingOver?: boolean;

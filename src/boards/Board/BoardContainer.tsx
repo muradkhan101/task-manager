@@ -4,7 +4,7 @@ import { connect as Connect } from 'react-redux';
 
 import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
-import { UpdateTaskOrder$ } from '../store/actions';
+import { UpdateTaskOrder$, StartDragTask, EndDrag, StartDragBoard } from '../store/actions';
 import { OrderedTaskItem } from '../Task/OrderedTaskItem';
 import { AddTask$, UpdateTask$, RemoveTask$ } from '../Task/store';
 import { Theme } from '@app/common';
@@ -21,6 +21,7 @@ import {
     DragElementWrapper,
 } from 'react-dnd';
 import { StoreState } from '../store/storeConfig';
+import { RemoveBoard$ } from '@app/board/store';
 
 const taskSource = {
     beginDrag(props: Props) {
@@ -29,7 +30,8 @@ const taskSource = {
     endDrag(props: Props, monitor: DragSourceMonitor, component: BoardContainerComponent) {
         let dropResult = monitor.getDropResult();
         if (dropResult) {
-            let orderedArray = props.reorderBoards(props.index, dropResult.index);
+            component.handleBoardDrag(null, 'DROP');
+            props.reorderBoards(props.index, dropResult.index);
         }
     },
     isDragging(props: Props, monitor: DragSourceMonitor) {
@@ -131,13 +133,52 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
         this.setState({orderedTasks});
         return orderedTasks;
     }
-    dispatchTaskOrder = (order: Array<number>) => {
-        this.props.dispatch(
-            new UpdateTaskOrder$(this.props.board.ID, order)
-        );
+    handleBoardDrag = (payload: IBoard, type: string) => {
+        switch (type) {
+            case ('START'): {
+                this.props.dispatch(
+                    new StartDragBoard(payload)
+                );
+                break;
+            }
+            case ('DELETE'): {
+                this.props.dispatch(
+                    new RemoveBoard$(this.props.board.ID)
+                );
+                break;
+            }
+            case ('DROP'): {
+                this.props.dispatch(
+                    new EndDrag()
+                );
+                break;
+            }
+        }
     }
-    handleTaskDelete = (boardId: number) => (taskId: number) => {
-        this.props.dispatch(new RemoveTask$(taskId))
+    handleTaskDrag = (payload: number | Array<number> | ITask, type: string) => {
+        switch (type) {
+            case ('START'): {
+                let task: ITask = this.state.orderedTasks.filter(t => t.ID === payload)[0];
+                if (task) {
+                    this.props.dispatch(new StartDragTask(task, task.Board));
+                }
+                break;
+            }
+            case ('REORDER'): {
+                this.props.dispatch(
+                    new UpdateTaskOrder$(this.props.board.ID, payload)
+                );            }
+                break;
+            case ('DROP'): {
+                this.props.dispatch(
+                    new EndDrag()
+                );
+                this.props.dispatch(
+                    new RemoveTask$(payload as number)
+                );
+                break;
+            }
+        }
     }
     render() {
         const { board, connectDropTarget, connectDragSource, theme } = this.props;
@@ -148,14 +189,14 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
                 position: 'relative'
             }}>
                 <Board board={board} createTask={this.createTask} theme={theme}>
-                    <TaskDeleter boardId={board.ID} handleDrop={this.handleTaskDelete(board.ID)}/>
+                    <TaskDeleter boardId={board.ID} handleDrop={this.handleTaskDrag}/>
                     {orderedTasks.map((issue, i) =>
                             <OrderedTaskItem
                                 key={issue.ID}
                                 boardId={board.ID}
                                 click={this.toggleTaskStatus}
                                 reorderTasks={this.reorderTasks}
-                                dispatchTaskOrder={this.dispatchTaskOrder}
+                                handleDrag={this.handleTaskDrag}
                                 index={i}
                                 task={issue} />)
                     }

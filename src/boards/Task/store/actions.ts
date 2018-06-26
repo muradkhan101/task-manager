@@ -17,8 +17,6 @@ export const names = {
     UpdateTask: 'RENAME_TASK',
     ReorderTask: 'REORDER_TASKS',
     AddMultipleTasks: 'ADD_MULTIPLE_TASKS',
-    TaskDragStart: 'TASK_DRAG_START',
-    TaskDragEnd: 'TASK_DRAG_END',
     AddTask$: 'ADD_TASK$',
     RemoveTask$: 'REMOVE_TASK$',
     UpdateTask$: 'RENAME_TASK$',
@@ -35,9 +33,9 @@ export class AddTask implements TaskAction {
 }
 export class RemoveTask implements TaskAction {
     type = names.RemoveTask;
-    public payload: TaskPayload;
-    constructor(task: ITask) {
-        this.payload = { task };
+    public payload;
+    constructor(taskId: number) {
+        this.payload = { taskId };
     }
 }
 export class UpdateTask implements TaskAction {
@@ -60,18 +58,6 @@ export class AddMultipleTasks implements Action {
     constructor(tasks: Array<ITask>) {
         this.payload = { tasks };
     }
-}
-
-export class TaskDragStart implements Action {
-    type = names.TaskDragStart;
-    public payload;
-    constructor(task: ITask, boardId: number) {
-        this.payload = { task, boardId };
-    }
-}
-export class TaskDragEnd implements Action {
-    type = names.TaskDragEnd;
-    public payload;
 }
 export class AddTask$ extends AddTask {
     type = names.AddTask$;

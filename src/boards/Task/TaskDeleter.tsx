@@ -16,7 +16,7 @@ const taskTarget = {
     drop(props: Props, monitor: DropTargetMonitor, component: TaskDeleter) {
         let dragItem = monitor.getItem();
         if (dragItem && dragItem.taskId) {
-            props.handleDrop(dragItem.taskId)
+            props.handleDrop(dragItem.taskId);
         }
     },
     canDrop(props: Props, monitor: DropTargetMonitor) {
@@ -35,7 +35,7 @@ function collect(connect: DropTargetConnector, monitor: DropTargetMonitor) {
 interface Props {
     connectDropTarget?: ConnectDropTarget;
     boardId: number;
-    handleDrop: (any) => void
+    handleDrop: (taskId: number) => void;
 }
 @DropTarget(ItemTypes.TASK, taskTarget, collect)
 export class TaskDeleter extends React.Component<Props> {

@@ -32,11 +32,11 @@ export class CreateBoard implements BoardAction {
     }
 
 }
-export class RemoveBoard implements BoardAction {
+export class RemoveBoard implements Action {
     type = names.RemoveBoard;
-    public payload: BoardPayload;
-    constructor(board: IBoard) {
-        this.payload = { board };
+    public payload;
+    constructor(boardId: number) {
+        this.payload = { boardId };
     }
 }
 export class UpdateBoard implements BoardAction {

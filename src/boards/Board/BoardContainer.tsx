@@ -6,9 +6,9 @@ import { Board } from './Board';
 import { IBoard, ITask } from '../common/interfaces';
 import { UpdateTaskOrder$ } from '../store/actions';
 import { OrderedTaskItem } from '../Task/OrderedTaskItem';
-import { AddTask$, UpdateTask$ } from '../Task/store';
+import { AddTask$, UpdateTask$, RemoveTask$ } from '../Task/store';
 import { Theme } from '@app/common';
-
+import { TaskDeleter } from '@app/task/TaskDeleter';
 import { ItemTypes } from '../dragDrop';
 import {
     DragSource,
@@ -136,6 +136,9 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
             new UpdateTaskOrder$(this.props.board.ID, order)
         );
     }
+    handleTaskDelete = (boardId: number) => (taskId: number) => {
+        this.props.dispatch(new RemoveTask$(taskId))
+    }
     render() {
         const { board, connectDropTarget, connectDragSource, theme } = this.props;
         const { orderedTasks } = this.state;
@@ -145,6 +148,7 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
                 position: 'relative'
             }}>
                 <Board board={board} createTask={this.createTask} theme={theme}>
+                    <TaskDeleter boardId={board.ID} handleDrop={this.handleTaskDelete(board.ID)}/>
                     {orderedTasks.map((issue, i) =>
                             <OrderedTaskItem
                                 key={issue.ID}

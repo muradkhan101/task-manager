@@ -24,6 +24,9 @@ const getBoardQuery = (id: number) => `graphql?query={board(id:${id}){`
     + 'ID,Name,CreatedBy,CreateDate,Owner,TaskOrder,Issues{'
     + 'ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate}}}';
 
+const removeBoardMutation = (boardId: number) => 'graphql?query=mutation{'
+    + `removeBoard(boardId:${boardId})}`;
+
 type AsyncBoardAction = ActionsObservable<actions.BoardAction>;
 
 export const addBoard = (action$: AsyncBoardAction) =>
@@ -45,4 +48,11 @@ export const getBoard = (action$) =>
         .mergeMap( action => http.get<IBoard>(getBoardQuery(action.payload.id))
             .pipe(filterOnProperty('board'))
             .map(res => new actions.CreateBoard(res))
+    );
+
+export const removeBoard = (action$) =>
+    action$.ofType(actions.names.RemoveBoard$)
+        .mergeMap( action => http.get(removeBoardMutation(action.payload.boardId))
+            .pipe(filterOnProperty('removeBoard'))
+            .map(res => res ? new actions.RemoveBoard(action.payload.boardId) : null)
     );

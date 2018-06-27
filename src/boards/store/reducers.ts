@@ -54,9 +54,9 @@ export function drag(state = {}, action) {
         }
         case (actions.names.StartDragBoard): {
             return {
-                type: 'task',
+                type: 'board',
                 board: action.payload.board,
-            }
+            };
         }
         case (actions.names.EndDrag): {
             return {};

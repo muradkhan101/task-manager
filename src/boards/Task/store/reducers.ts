@@ -4,11 +4,13 @@ import { ITask } from '../../common/interfaces';
 type TaskState = Array<ITask>;
 
 export function tasks(state: TaskState = [], action: actions.TaskAction) {
+    console.log(action);
     switch (action.type) {
         case (actions.names.AddTask): {
             return [...state, action.payload.task];
         }
         case (actions.names.RemoveTask): {
+            console.log('REMOVING TASK');
             return state.filter(task => task.ID !== (action as any).payload.taskId);
         }
         case (actions.names.UpdateTask): {

@@ -25,6 +25,7 @@ export interface StoreState {
     boards: Array<IBoard>;
     user: User;
     theme: Theme;
+    drag: any;
 }
 
 function reduceReducers(...args) {

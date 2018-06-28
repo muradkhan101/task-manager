@@ -29,18 +29,28 @@ const updateTaskMutation = (task: ITask, updates) => 'graphql?query=mutation{upd
     + '{ID,Name,Description,Board,CreateDate,Owner,CreatedBy}}';
 
 
+const removeTaskMutation = (taskId: number) => 'graphql?query=mutation{removeIssue('
+    + `taskId:${taskId})}`;
+
 type AsyncTaskAction = ActionsObservable<actions.TaskAction>;
 
-export const addBoard = (action$: AsyncTaskAction) =>
+export const addIssue = (action$: AsyncTaskAction) =>
     action$.ofType(actions.names.AddTask$)
         .mergeMap(action => http.get<ITask>(createTaskMutation(action.payload.task))
             .pipe(filterOnProperty('createIssue'))
             .map((res: ITask) => new actions.AddTask(res))
         );
 
-export const renameBoard = (action$: AsyncTaskAction) =>
+export const updateIssue = (action$: AsyncTaskAction) =>
     action$.ofType(actions.names.UpdateTask$)
         .mergeMap(action => http.get<ITask>(updateTaskMutation(action.payload.task, action.payload.updates))
             .pipe(filterOnProperty('updateIssue'))
             .map((res: ITask) => new actions.UpdateTask(res, action.payload.updates))
         );
+
+export const removeTask = (action$) =>
+    action$.ofType(actions.names.RemoveTask$)
+        .mergeMap(action => http.get(removeTaskMutation(action.payload.taskId))
+            .pipe(filterOnProperty('removeIssue'))
+            .map((res: boolean) => res ? new actions.RemoveTask(action.payload.taskId) : null)
+    );

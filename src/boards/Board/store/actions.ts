@@ -1,4 +1,4 @@
-import { IBoard } from '../../common/interfaces';
+import { IBoard, ITask } from '../../common/interfaces';
 import { Action } from '../../../common/helpers';
 
 export interface BoardPayload {
@@ -32,11 +32,11 @@ export class CreateBoard implements BoardAction {
     }
 
 }
-export class RemoveBoard implements BoardAction {
+export class RemoveBoard implements Action {
     type = names.RemoveBoard;
-    public payload: BoardPayload;
-    constructor(board: IBoard) {
-        this.payload = { board };
+    public payload;
+    constructor(boardId: number) {
+        this.payload = { boardId };
     }
 }
 export class UpdateBoard implements BoardAction {
@@ -60,7 +60,6 @@ export class AddMultipleBoards implements BoardAction {
         this.payload = { boards };
     }
 }
-
 export class CreateBoard$ extends CreateBoard {
     type = names.CreateBoard$;
 }

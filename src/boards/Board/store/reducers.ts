@@ -13,7 +13,7 @@ export function boards(state: BoardState = [], action: actions.BoardAction) {
             return [ ...state, action.payload.board ];
         }
         case (actions.names.RemoveBoard): {
-            return state.filter((board: IBoard) => board.ID !== action.payload.board.ID);
+            return state.filter((board: IBoard) => board.ID !== (action as any).payload.boardId);
         }
         case (actions.names.UpdateBoard): {
             return state.map((board: IBoard) => {

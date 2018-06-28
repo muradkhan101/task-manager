@@ -9,7 +9,7 @@ export function tasks(state: TaskState = [], action: actions.TaskAction) {
             return [...state, action.payload.task];
         }
         case (actions.names.RemoveTask): {
-            return state.filter(task => task.ID !== action.payload.task.ID);
+            return state.filter(task => task.ID !== (action as any).payload.taskId);
         }
         case (actions.names.UpdateTask): {
             return state.map(task => {

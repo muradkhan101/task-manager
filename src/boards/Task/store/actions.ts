@@ -33,9 +33,9 @@ export class AddTask implements TaskAction {
 }
 export class RemoveTask implements TaskAction {
     type = names.RemoveTask;
-    public payload: TaskPayload;
-    constructor(task: ITask) {
-        this.payload = { task };
+    public payload;
+    constructor(taskId: number) {
+        this.payload = { taskId };
     }
 }
 export class UpdateTask implements TaskAction {

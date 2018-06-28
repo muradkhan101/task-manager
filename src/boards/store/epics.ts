@@ -10,7 +10,7 @@ import { filterOnProperty, safeParse } from '@app/common';
 const getAllQuery = (userId: number) => `graphql?query={user(id:${userId}){`
     + 'ID,Email,FirstName,LastName,BoardOrder,'
     + 'Boards{ID,Name,CreatedBy,CreateDate,Owner,TaskOrder},'
-    + 'Issues{ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate}}}';
+    + 'Issues{ID,Name,Description,DueDate,CreatedBy,Owner,Board,CreateDate,Status}}}';
 
 const updateBoardOrderMutation = (userId: number, boardOrder: Array<number>) => `graphql?query=mutation{`
     + `updateBoardOrder(UserId:${userId},BoardOrder:"${JSON.stringify(boardOrder)}")`

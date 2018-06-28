@@ -6,28 +6,27 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import styled from 'react-emotion';
 
-import { GetAllUserInfo$, UpdateBoardOrder$,  } from './store/actions';
+import { GetAllUserInfo$, UpdateBoardOrder$, StartDragBoard, EndDrag,  } from './store/actions';
 import { StoreState } from './store/storeConfig';
-import { CreateBoard$ } from './Board/store/actions';
+import { CreateBoard$, RemoveBoard$ } from './Board/store/actions';
 import { TextToInput } from './Board/TextToInput';
 
 import { BoardContainer } from '@app/board/BoardContainer';
 import { ITask, IBoard } from './common/interfaces';
 import { User } from '../common/helpers';
-
 import { StorageHelper, Theme } from '@app/common';
+import { BoardDeleter } from './Board/BoardDeleter';
 
 const Boards = styled('div')`
     display: flex;
 `;
 
 interface Props {
-    tasks: Array<ITask>;
     boards: Array<IBoard>;
     theme: Theme;
     user: User;
-    order: Array<number>;
     dispatch: Dispatch<any>;
+    drag: any;
 }
 @DragDropContext(HTML5Backend)
 export class DashboardContainerComponent extends React.Component<Props> {
@@ -50,7 +49,7 @@ export class DashboardContainerComponent extends React.Component<Props> {
             : [];
         orderedBoards = orderedBoards.concat(
             boards.filter(board => !orderedBoards.map(brd => brd.ID).includes(board.ID))
-        );
+        ).filter((item, i, arr) => arr.map(b => b.ID).indexOf(item.ID) === i);
         this.setState({orderedBoards});
     }
     createBoard = (title: string) => {
@@ -64,6 +63,27 @@ export class DashboardContainerComponent extends React.Component<Props> {
             TaskOrder: [],
         };
         this.props.dispatch(new CreateBoard$(board));
+    }
+    handleBoardDrag = (payload: IBoard | number, type: string) => {
+        switch (type) {
+            case ('START'): {
+                this.props.dispatch(
+                    new StartDragBoard(payload as IBoard)
+                );
+                break;
+            }
+            case ('DELETE'): {
+                this.props.dispatch(
+                    new RemoveBoard$(payload as number)
+                );
+            }
+            case ('DROP'): {
+                this.props.dispatch(
+                    new EndDrag()
+                );
+                break;
+            }
+        }
     }
     reorderBoards = (oldPos: number, newPos: number) => {
         // let tasks = this.props.issues.filter(task => task.Board === this.props.board.ID);
@@ -80,13 +100,16 @@ export class DashboardContainerComponent extends React.Component<Props> {
         );
     }
     render() {
+        let { drag } = this.props;
         let { orderedBoards } = this.state;
         return (
             <Boards>
+                {drag.type === 'board' ? <BoardDeleter handleDrop={this.handleBoardDrag}/> : null}
                 {orderedBoards.map((board, i) => {
                 return <BoardContainer
                     board={board}
                     index={i}
+                    handleBoardDrag={this.handleBoardDrag}
                     reorderBoards={this.reorderBoards}
                     key={board.ID} />;
                 })
@@ -97,17 +120,17 @@ export class DashboardContainerComponent extends React.Component<Props> {
             }} submit={this.createBoard} text={''}>
                 Create a board
             </TextToInput>
+            {drag.type === 'board' ? <BoardDeleter handleDrop={this.handleBoardDrag} /> : null}
             </Boards>
         );
     }
 }
 
 const mapStateToProps = (state: StoreState) => ({
-    tasks: state.tasks,
     boards: state.boards,
     user: state.user,
     theme: state.user.theme,
-    order: state.user.BoardOrder,
+    drag: state.drag,
 });
 
 // const mapDispatchToProps = (dispatch) => ({

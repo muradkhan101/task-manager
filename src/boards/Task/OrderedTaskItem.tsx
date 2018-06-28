@@ -67,7 +67,7 @@ interface Props {
 @DragSource(ItemTypes.TASK, taskSource, collectDrag)
 export class OrderedTaskItem extends React.Component<Props> {
     render() {
-        const { index, task, click, connectDropTarget, connectDragSource } = this.props;
+        const { task, click, connectDropTarget, connectDragSource } = this.props;
         return connectDragSource(connectDropTarget(
             <div style={{
                 position: 'relative',

@@ -49,6 +49,12 @@ const classToObject = store => next => action => {
     return next(actionObject);
 };
 
+const logger = store => next => action => {
+    console.log('[STORE :: ]', store);
+    console.log('[ACTION :: ]', action.type);
+    return next(action);
+}
+
 export function configureStore() {
     const store = createStore<StoreState>(
         combinedReducers,

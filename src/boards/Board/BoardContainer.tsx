@@ -94,8 +94,7 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
         function findItem<T>(boardList: Array<T>, param: string) {
             return (ID: number) => boardList.filter(board => board[param] === ID)[0];
         }
-        const { board, issues } = this.props;
-
+        const { board, issues } = nextProps;
         let orderedTasks = board.TaskOrder.map(findItem<ITask>(issues, 'ID')).filter(j => j);
         orderedTasks = orderedTasks.concat(
             issues.filter(issue => !orderedTasks.map(iss => iss.ID).includes(issue.ID))
@@ -193,11 +192,10 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
 }
 
 const mapStateToProps = (state: StoreState, ownProps: Props) => ({
-   issues: state.tasks.filter(task => task.Board === ownProps.board.ID),
+    issues: state.tasks.filter(task => task.Board === ownProps.board.ID),
    userId: state.user.ID,
    theme: state.user.theme,
-   drag: state.drag,
-   ...ownProps
+   drag: state.drag
 });
 
 export const BoardContainer = Connect(

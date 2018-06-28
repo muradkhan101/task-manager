@@ -43,11 +43,18 @@ function collectDrag(connect: DragSourceConnector, monitor: DragSourceMonitor) {
 }
 
 const taskTarget = {
-    drop(props: Props, monitor: DropTargetMonitor, component) {
+    drop(props: Props, monitor: DropTargetMonitor, component: BoardContainerComponent) {
         // The args for the item being dropped one
         // The return will be passed to the dropEnd
         let dragItem = monitor.getItem();
-        props.reorderBoards(dragItem.index, props.index);
+        if (dragItem.type === 'board') {
+            props.reorderBoards(dragItem.index, props.index);
+        } else if (dragItem.type === 'task') {
+            component.handleTaskDrag(
+                { task: dragItem.task, updates: {Board: props.board.ID}} as any,
+                'MOVE_TASK'
+            );
+        }
         return { boardId: props.board.ID, index: props.index };
     },
     canDrop(props: Props, monitor: DropTargetMonitor) {
@@ -150,6 +157,14 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
                 );
                 break;
             }
+            case ('MOVE_TASK'): {
+                let { task, updates } = payload as any;
+                console.log(task);
+                this.props.dispatch(
+                    new UpdateTask$(task, updates)
+                );
+                break;
+            }
             case ('DELETE'): {
                 this.props.dispatch(
                     new RemoveTask$(payload as number)
@@ -192,7 +207,7 @@ class BoardContainerComponent extends React.Component<Props & ReduxProps> {
 }
 
 const mapStateToProps = (state: StoreState, ownProps: Props) => ({
-    issues: state.tasks.filter(task => task.Board === ownProps.board.ID),
+   issues: state.tasks.filter(task => task.Board === ownProps.board.ID),
    userId: state.user.ID,
    theme: state.user.theme,
    drag: state.drag

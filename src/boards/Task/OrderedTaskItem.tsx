@@ -16,7 +16,7 @@ import {
 const taskSource = {
     beginDrag(props: Props) {
         props.handleDrag(props.task.ID, 'START');
-        return { taskId: props.task.ID, boardId: props.boardId, type: ItemTypes.TASK, index: props.index };
+        return { taskId: props.task.ID, boardId: props.boardId, type: ItemTypes.TASK, index: props.index, task: props.task };
     },
     isDragging(props: Props, monitor: DragSourceMonitor) {
         return props.task.ID === monitor.getItem().taskId;

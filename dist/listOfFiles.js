@@ -1,1 +1,1 @@
-let itemList = ["../app/vendor.1e43b942a88907aea3fc.js","../app/main.eb3cc94650237138b879.css","../app/main.eb3cc94650237138b879.js"]
+let itemList = ["../app/vendor.1e43b942a88907aea3fc.js","../app/main.d83bea9632eebdb3756c.css","../app/main.d83bea9632eebdb3756c.js"]

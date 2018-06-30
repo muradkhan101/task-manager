@@ -35,7 +35,11 @@ export class DashboardContainerComponent extends React.Component<Props> {
         orderedBoards: [],
     };
     componentWillMount() {
-        this.props.dispatch(new GetAllUserInfo$(this.state.user.ID));
+        if (this.state.user) {
+            this.props.dispatch(new GetAllUserInfo$(this.state.user.ID));
+        } else {
+            window.location.href = '../login';
+        }
     }
     componentWillReceiveProps(nextProps: Readonly<Props>) {
         function findItem<T>(boardList: Array<T>, param: string) {

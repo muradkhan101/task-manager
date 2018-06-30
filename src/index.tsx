@@ -18,7 +18,7 @@ http.authFn = (options: RequestInit) => {
     }
     return options;
 };
-http.baseUrl = 'http://34.219.246.138/';
+http.baseUrl = 'https://34.219.246.138/';
 
 import { TextToInput } from './boards/Board/TextToInput';
 

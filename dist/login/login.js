@@ -3,7 +3,7 @@ let registrationForm = document.getElementById('register--form');
 let signupButton = document.getElementById('link--register');
 let errorBox = document.getElementById('error-message');
 
-const baseUrl = 'https://34.219.246.138/';
+const baseUrl = 'http://52.32.35.105/';
 const redirectUrl = '/app/index.html';
 
 if (localStorage.getItem('helper|user')) {

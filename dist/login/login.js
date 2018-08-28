@@ -92,7 +92,7 @@ registrationForm.addEventListener('submit', function(e) {
                 addErrorMessage(res.error);
                 return;
             }
-            Object.entries( ([key, val]) => registerObject[key] = val);
+            Object.entries(res).forEach( ([key, val]) => registerObject[key] = val);
             saveUserObject(registerObject);
             window.location.href = redirectUrl;
         });

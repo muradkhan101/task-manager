@@ -137,6 +137,10 @@ const mapStateToProps = (state: StoreState) => ({
     drag: state.drag,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+    dispatch: dispatch
+})
+
 // const mapDispatchToProps = (dispatch) => ({
 //     loadInfo: (id: number) => dispatch(new GetAllUserInfo$(id)),
 //     taskDispatch: {
@@ -151,5 +155,5 @@ const mapStateToProps = (state: StoreState) => ({
 
 export const DashboardContainer = connect(
     mapStateToProps,
-    // mapDispatchToProps,
-)(DashboardContainerComponent as any); // Figure how to work w/o as any
+    mapDispatchToProps,
+)(DashboardContainerComponent); // Figure how to work w/o as any
